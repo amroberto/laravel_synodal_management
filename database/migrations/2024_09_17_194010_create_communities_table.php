@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('corporate_name');
             $table->string('fantasy_name');
             $table->string('document');
+            $table->foreignId('parish_id')->index()->constrained()->cascadeOnDelete();
             $table->string('phone');
             $table->string('email');
             $table->foreignId('address_id')->index()->constrained()->cascadeOnDelete();

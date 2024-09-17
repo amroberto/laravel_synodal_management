@@ -22,7 +22,8 @@ return new class extends Migration
             $table->string('business_phone');
             $table->string('home_phone');
             $table->string('email');
-            $table->foreignId('address_id')->index()->constrained()->cascadeOnDelete();                      
+            $table->foreignId('address_id')->index()->constrained()->cascadeOnDelete(); 
+            $table->string('photo')->nullable();                 
             $table->timestamps();
         });
     }

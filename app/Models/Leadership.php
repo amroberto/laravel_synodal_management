@@ -21,6 +21,7 @@ class Leadership extends Model
         'home_phone',
         'email',
         'address_id',
+        'photo',
     ];
 
     public function community():HasOne
