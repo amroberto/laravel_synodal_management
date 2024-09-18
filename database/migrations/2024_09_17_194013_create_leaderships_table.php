@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Enums\GenderEnum;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('is_actice')->default(true);
             $table->date('birthdate');
-            $table->enum('gender', array_column(GenderEnum::cases(), 'value'));
+            $table->enum('gender', GenderEnum::values());
             $table->foreignId('community_id')->index()->constrained()->cascadeOnDelete();
             $table->string('mobile');
             $table->string('business_phone');
