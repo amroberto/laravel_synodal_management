@@ -18,11 +18,17 @@ class City extends Model
         'state_id'
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);
     }
 
+    /**
+     * @return HasOne
+     */
     public function address():HasOne
     {
         return $this->hasOne(Address::class);

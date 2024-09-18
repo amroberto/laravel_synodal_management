@@ -20,11 +20,17 @@ class Community extends Model
         'address_id',
     ];
 
+    /**
+     * @return HasOne
+     */
     public function parish(): HasOne
     {
         return $this->hasOne(Parish::class);
     }
 
+    /**
+     * @return HasOne
+     */
     public function address(): HasOne
     {
         return $this->hasOne(Address::class);

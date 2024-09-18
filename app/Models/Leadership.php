@@ -24,11 +24,29 @@ class Leadership extends Model
         'photo',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'gender' => 'boolean',
+        ];
+    }
+
+    /**
+     * @return HasOne
+     */
     public function community():HasOne
     {
         return $this->hasOne(Community::class);
     }
 
+    /**
+     * @return HasOne
+     */
     public function address():HasOne
     {
         return $this->hasOne(Address::class);

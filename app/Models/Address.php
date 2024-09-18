@@ -21,16 +21,25 @@ class Address extends Model
         'city_id',
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function leadership():BelongsTo
     {
         return $this->belongsTo(Leadership::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function community():BelongsTo
     {
         return $this->belongsTo(Community::class);

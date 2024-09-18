@@ -15,6 +15,9 @@ class State extends Model
         'abbreviation'
     ];
 
+    /**
+     * @return HasOne
+     */
     public function city():HasOne
     {
         return $this->hasOne(City::class);
