@@ -17,7 +17,10 @@ class StateResource extends Resource
 {
     protected static ?string $model = State::class;
 
-    protected static ?string $navigationGroup = 'Registration';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('menu.Registration');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-map';
 

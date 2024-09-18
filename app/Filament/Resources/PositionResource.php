@@ -21,7 +21,10 @@ class PositionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     
-    protected static ?string $navigationGroup = 'Registration';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('menu.Registration');
+    }
 
     public static function getModelLabel(): string
     {

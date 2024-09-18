@@ -19,7 +19,10 @@ class CityResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
-    protected static ?string $navigationGroup = 'Registration';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('menu.Registration');
+    }
     
     public static function getModelLabel(): string
     {
