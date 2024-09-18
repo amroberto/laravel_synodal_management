@@ -20,13 +20,13 @@ class Community extends Model
         'address_id',
     ];
 
-    public function parish(): BelongsTo
+    public function parish(): HasOne
     {
-        return $this->belongsTo(Parish::class);
+        return $this->hasOne(Parish::class);
     }
 
-    public function address(): BelongsTo
+    public function address(): HasOne
     {
-        return $this->belongsTo(Address::class);
+        return $this->hasOne(Address::class);
     }
 }

@@ -26,13 +26,13 @@ class Address extends Model
         return $this->belongsTo(City::class);
     }
 
-    public function leadership():HasOne
+    public function leadership():BelongsTo
     {
-        return $this->hasOne(Leadership::class);
+        return $this->belongsTo(Leadership::class);
     }
 
-    public function community():HasOne
+    public function community():BelongsTo
     {
-        return $this->hasOne(Community::class);
+        return $this->belongsTo(Community::class);
     }
 }
