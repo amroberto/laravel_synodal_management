@@ -6,9 +6,13 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
+use Filament\Facades\Filament;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
+use Filament\Tables\Columns\Column;
+use Filament\Forms\Components\Field;
 use Filament\Http\Middleware\Authenticate;
+use App\Filament\App\Resources\ParishResource;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -24,6 +28,15 @@ class AppPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->bootUsing(function(){
+                Field::configureUsing(function (Field $field){
+                    $field->translateLabel();
+                });
+
+                Column::configureUsing(function (Column $column){
+                    $column->translateLabel();
+                });
+            })
             ->id('app')
             ->path('app')
             ->login()

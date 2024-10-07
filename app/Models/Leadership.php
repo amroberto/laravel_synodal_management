@@ -36,19 +36,8 @@ class Leadership extends Model
         ];
     }
 
-    /**
-     * @return HasOne
-     */
-    public function community():HasOne
+    public function addresses()
     {
-        return $this->hasOne(Community::class);
-    }
-
-    /**
-     * @return HasOne
-     */
-    public function address():HasOne
-    {
-        return $this->hasOne(Address::class);
+        return $this->hasMany(Address::class);
     }
 }

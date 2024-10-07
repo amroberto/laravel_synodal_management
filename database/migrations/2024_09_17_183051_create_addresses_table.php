@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('address');
-            $table->string('addressNumber');
-            $table->string('complement');
-            $table->string('province');
-            $table->string('postalCode');
-            $table->foreignId('city_id')->index()->constrained()->cascadeOnDelete();
-            $table->timestamps();
+            $table->string('street');
+            $table->string('address_number');
+            $table->string('complement')->nullable();
+            $table->string('neighborhood');
+            $table->string('postal_code');
+            $table->foreignId('city_id')->constrained()->cascadeOnDelete();
+            
+            // Chaves estrangeiras específicas
+            $table->foreignId('community_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('leadership_id')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 

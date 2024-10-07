@@ -14,25 +14,18 @@ class Community extends Model
         'corporate_name',
         'fantasy_name',
         'document',
-        'parish_id',
+        'unity_type',
         'phone',
         'email',
         'address_id',
     ];
 
-    /**
-     * @return HasOne
-     */
-    public function parish(): HasOne
-    {
-        return $this->hasOne(Parish::class);
-    }
+    protected $casts = [
+        'unit_type' => UnitType::class,
+    ];
 
-    /**
-     * @return HasOne
-     */
-    public function address(): HasOne
+    public function addresses()
     {
-        return $this->hasOne(Address::class);
+        return $this->hasMany(Address::class);
     }
 }

@@ -13,12 +13,14 @@ class Address extends Model
     use HasFactory;
 
     protected $fillable = [
-        'address',
-        'addressNumber',
+        'street',
+        'address_number',
         'complement',
-        'province',
-        'postalCode',
+        'neighborhood',
+        'postal_code',
         'city_id',
+        'community_id',
+        'leadership_id',
     ];
 
     /**
@@ -29,19 +31,13 @@ class Address extends Model
         return $this->belongsTo(City::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
-    public function leadership():BelongsTo
-    {
-        return $this->belongsTo(Leadership::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function community():BelongsTo
+    public function community()
     {
         return $this->belongsTo(Community::class);
+    }
+
+    public function leadership()
+    {
+        return $this->belongsTo(Leadership::class);
     }
 }

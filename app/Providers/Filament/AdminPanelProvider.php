@@ -7,6 +7,8 @@ use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Pages\Dashboard;
+use Filament\Facades\Filament;
+use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Columns\Column;
 use Filament\Widgets\AccountWidget;
@@ -14,6 +16,7 @@ use Filament\Forms\Components\Field;
 use App\Http\Middleware\VerifyIsAdmin;
 use Filament\Widgets\FilamentInfoWidget;
 use Filament\Http\Middleware\Authenticate;
+use App\Filament\App\Resources\ParishResource;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -25,7 +28,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 
 class AdminPanelProvider extends PanelProvider
-{
+{   
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -42,6 +45,13 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->userMenuItems([
+                MenuItem::make()
+                ->label('App')
+                ->icon('heroicon-o-cog-6-tooth')
+                ->url('/app')
+                ->visible(fn(): bool => auth()->user()->is_admin)
+            ])
             ->colors([
                 'primary' => Color::Indigo,
                 'danger' => color::Red,
@@ -76,5 +86,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+            
     }
 }
