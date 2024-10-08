@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Parish;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Address;
 
 class Community extends Model
 {
@@ -24,8 +24,8 @@ class Community extends Model
         'unit_type' => UnitType::class,
     ];
 
-    public function addresses()
+    public function address()
     {
-        return $this->hasMany(Address::class);
+        return $this->hasOne(Address::class);
     }
 }

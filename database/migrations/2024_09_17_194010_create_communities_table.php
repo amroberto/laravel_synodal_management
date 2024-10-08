@@ -19,7 +19,6 @@ return new class extends Migration
             $table->enum('unit_type', ['preaching_point', 'community', 'parish'])->default('community');
             $table->string('phone');
             $table->string('email');
-            $table->foreignId('address_id')->index()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

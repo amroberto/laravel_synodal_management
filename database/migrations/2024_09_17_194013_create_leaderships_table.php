@@ -18,12 +18,10 @@ return new class extends Migration
             $table->boolean('is_actice')->default(true);
             $table->date('birthdate');
             $table->enum('gender', GenderEnum::values());
-            $table->foreignId('community_id')->index()->constrained()->cascadeOnDelete();
             $table->string('mobile');
             $table->string('business_phone');
             $table->string('home_phone');
             $table->string('email');
-            $table->foreignId('address_id')->index()->constrained()->cascadeOnDelete(); 
             $table->string('photo')->nullable();                 
             $table->timestamps();
         });

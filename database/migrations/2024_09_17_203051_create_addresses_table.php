@@ -31,6 +31,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->dropForeign(['city_id']);  // Remover a chave estrangeira
+        });
+    
         Schema::dropIfExists('addresses');
     }
 };

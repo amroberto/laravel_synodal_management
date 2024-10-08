@@ -28,14 +28,20 @@ class Address extends Model
      */
     public function city(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class, 'city_id'); 
     }
 
-    public function community()
+    /**
+     * @return BelongsTo
+     */
+    public function community(): BelongsTo
     {
         return $this->belongsTo(Community::class);
     }
 
+    /**
+     * @return [type]
+     */
     public function leadership()
     {
         return $this->belongsTo(Leadership::class);

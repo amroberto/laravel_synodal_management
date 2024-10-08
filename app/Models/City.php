@@ -26,11 +26,8 @@ class City extends Model
         return $this->belongsTo(State::class);
     }
 
-    /**
-     * @return HasOne
-     */
-    public function address():HasOne
+    public function addresses(): HasMany
     {
-        return $this->hasOne(Address::class);
+        return $this->hasMany(Address::class, 'city_id');
     }
 }
