@@ -3,46 +3,52 @@
 namespace App\Filament\App\Resources\CommunityResource\Pages;
 
 use App\Filament\App\Resources\CommunityResource;
-use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditCommunity extends EditRecord
 {
     protected static string $resource = CommunityResource::class;
 
-    protected function getHeaderActions(): array
+    // Corrige a assinatura do método mount para aceitar o parâmetro correto
+    public function mount(string|int $record): void
     {
-        return [
-            Actions\DeleteAction::make(),
-        ];
+        // Certifique-se de passar o record para a classe pai
+        parent::mount($record);
     }
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        // Obter a comunidade atual
-        $community = $this->record;
-
-        if ($community && $community->address) {
-            // Atualizar o endereço existente
-            $community->address->update([
-                'postal_code'    => $data['postal_code'],
-                'city_id'        => $data['city_id'],
-                'street'         => $data['street'],
-                'neighborhood'   => $data['neighborhood'],
-                'address_number' => $data['address_number'],
-                'complement'     => $data['complement'],
+        // Se a comunidade tiver um endereço existente, ele é atualizado
+        if ($this->record->address) {
+            $this->record->address->update([
+                'postal_code' => $data['address']['postal_code'],
+                'city_id' => $data['address']['city_id'],
+                'street' => $data['address']['street'],
+                'neighborhood' => $data['address']['neighborhood'],
+                'address_number' => $data['address']['address_number'],
+                'complement' => $data['address']['complement'] ?? null,
             ]);
         }
 
-        // Remover os campos de endereço do array de dados para não tentar salvar na tabela `communities`
-        unset(
-            $data['postal_code'],
-            $data['city_id'],
-            $data['street'],
-            $data['neighborhood'],
-            $data['address_number'],
-            $data['complement']
-        );
+        // Remove os dados do endereço do array que vai salvar a comunidade, porque já atualizamos o endereço
+        unset($data['address']);
+
+        return $data;
+    }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        // Preenche os dados do endereço da comunidade no formulário
+        if ($this->record->address) {
+            $data['address'] = [
+                'postal_code' => $this->record->address->postal_code,
+                'city_id' => $this->record->address->city_id,
+                'street' => $this->record->address->street,
+                'neighborhood' => $this->record->address->neighborhood,
+                'address_number' => $this->record->address->address_number,
+                'complement' => $this->record->address->complement,
+            ];
+        }
 
         return $data;
     }

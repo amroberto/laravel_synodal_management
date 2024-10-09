@@ -74,7 +74,7 @@ class CommunityResource extends Resource
 
                 Forms\Components\Fieldset::make('Address Information')
                     ->schema([
-                        Forms\Components\TextInput::make('postal_code')
+                        Forms\Components\TextInput::make('address.postal_code')
                             ->label('Postal Code')
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
@@ -103,21 +103,21 @@ class CommunityResource extends Resource
                                 }
                             }),
 
-                        Forms\Components\TextInput::make('street')
+                        Forms\Components\TextInput::make('address.street')
                             ->required()
                             ->label('Street'),
 
-                        Forms\Components\TextInput::make('address_number')
+                        Forms\Components\TextInput::make('address.address_number')
                             ->required()
                             ->label('Number'),
 
-                        Forms\Components\TextInput::make('complement')
+                        Forms\Components\TextInput::make('address.complement')
                             ->label('Complement'),
 
-                        Forms\Components\TextInput::make('neighborhood')
+                        Forms\Components\TextInput::make('address.neighborhood')
                             ->label('Neighborhood'),
 
-                        Forms\Components\Select::make('city_id')
+                        Forms\Components\Select::make('address.city_id')
                             ->label('Select City')
                             ->options(City::all()->pluck('name', 'id'))
                             ->required(),
@@ -164,5 +164,38 @@ class CommunityResource extends Resource
             'create' => Pages\CreateCommunity::route('/create'),
             'edit'   => Pages\EditCommunity::route('/{record}/edit'),
         ];
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        // Verifica se o endereço existe, se não, cria um novo
+        if (!isset($data['address_id'])) {
+            $address = Address::create([
+                'postal_code' => $data['address']['postal_code'],
+                'city_id' => $data['address']['city_id'],
+                'street' => $data['address']['street'],
+                'neighborhood' => $data['address']['neighborhood'],
+                'address_number' => $data['address']['address_number'],
+                'complement' => $data['address']['complement'],
+            ]);
+            // Associa o ID do endereço criado ao registro de `Community`
+            $data['address_id'] = $address->id;
+        } else {
+            // Atualiza o endereço existente
+            $address = Address::find($data['address_id']);
+            $address->update([
+                'postal_code' => $data['address']['postal_code'],
+                'city_id' => $data['address']['city_id'],
+                'street' => $data['address']['street'],
+                'neighborhood' => $data['address']['neighborhood'],
+                'address_number' => $data['address']['address_number'],
+                'complement' => $data['address']['complement'],
+            ]);
+        }
+
+        // Remove os dados de endereço do array principal, para evitar problemas
+        unset($data['address']);
+
+        return $data;
     }
 }
