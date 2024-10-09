@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\State;
-use App\Models\Address;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,8 +25,4 @@ class City extends Model
         return $this->belongsTo(State::class);
     }
 
-    public function addresses(): HasMany
-    {
-        return $this->hasMany(Address::class, 'city_id');
-    }
 }

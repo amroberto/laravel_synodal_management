@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Community;
 use App\Models\Leadership;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Address extends Model
@@ -19,8 +20,6 @@ class Address extends Model
         'neighborhood',
         'postal_code',
         'city_id',
-        'community_id',
-        'leadership_id',
     ];
 
     /**
@@ -28,7 +27,7 @@ class Address extends Model
      */
     public function city(): BelongsTo
     {
-        return $this->belongsTo(City::class, 'city_id'); 
+        return $this->belongsTo(City::class);
     }
 
     /**
@@ -40,9 +39,9 @@ class Address extends Model
     }
 
     /**
-     * @return [type]
+     * @return BelongsTo
      */
-    public function leadership()
+    public function leadership(): BelongsTo
     {
         return $this->belongsTo(Leadership::class);
     }

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Address;
+use App\Enums\UnityTypeEnum;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Community extends Model
 {
@@ -21,11 +23,16 @@ class Community extends Model
     ];
 
     protected $casts = [
-        'unit_type' => UnitType::class,
+        'unity_type' => UnityTypeEnum::class,
     ];
 
-    public function address()
+
+    /**
+     * @return BelongsTo
+     */
+    public function address(): BelongsTo
     {
-        return $this->hasOne(Address::class);
+        return $this->belongsTo(Address::class);
     }
+    
 }

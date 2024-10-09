@@ -19,10 +19,6 @@ return new class extends Migration
             $table->string('neighborhood');
             $table->string('postal_code');
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
-            
-            // Chaves estrangeiras específicas
-            $table->foreignId('community_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId('leadership_id')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 
