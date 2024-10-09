@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('neighborhood');
             $table->string('postal_code');
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 

@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Community;
 use App\Models\Leadership;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,9 +34,9 @@ class Address extends Model
     /**
      * @return BelongsTo
      */
-    public function community(): BelongsTo
+    public function community(): HasOne
     {
-        return $this->belongsTo(Community::class);
+        return $this->hasOne(Community::class);
     }
 
     /**
