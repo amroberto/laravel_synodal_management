@@ -67,61 +67,62 @@ class CommunityResource extends Resource
                         Forms\Components\TextInput::make('email')
                             ->label('Email'),
 
-                        Forms\Components\Hidden::make('address_id'),
+                        Forms\Components\Hidden::make('address_id')
                     ])
                     ->columns(2)
                     ->label('Community Information'),
 
                 Forms\Components\Fieldset::make('Address Information')
                     ->schema([
-                        Forms\Components\TextInput::make('postal_code')
+                        Forms\Components\TextInput::make('address.postal_code')
                             ->label('Postal Code')
+                            ->default(fn ($record) => $record?->address?->postal_code)
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
                                 if (!empty($state)) {
-                                    // Consultar ViaCepService aqui
                                     $viaCepService = app(ViaCepService::class);
                                     $data = $viaCepService->consultarCep($state);
                                     
                                     if ($data) {
-                                        // Definir os valores retornados pelo ViaCep
-                                        $set('street', $data['logradouro'] ?? null);
-                                        $set('neighborhood', $data['bairro'] ?? null);
+                                        $set('address.street', $data['logradouro'] ?? null);
+                                        $set('address.neighborhood', $data['bairro'] ?? null);
 
-                                        // Buscar cidade na tabela `city` com base no nome retornado pelo ViaCep
-                                        $city = City::where('name', $data['localidade'])
-                                                ->whereHas('state', function ($query) use ($data) {
-                                                    $query->where('abbreviation', $data['uf']); // Fazendo a busca pela UF
-                                                })
-                                                ->first();
+                                        $city = \App\Models\City::where('name', $data['localidade'])
+                                            ->whereHas('state', function ($query) use ($data) {
+                                                $query->where('abbreviation', $data['uf']);
+                                            })
+                                            ->first();
 
-                                        // Se a cidade foi encontrada, definir o city_id
                                         if ($city) {
-                                            $set('city_id', $city->id);
+                                            $set('address.city_id', $city->id);
                                         }
                                     }
                                 }
                             }),
 
-                        Forms\Components\TextInput::make('street')
+                        Forms\Components\TextInput::make('address.street')
                             ->required()
-                            ->label('Street'),
+                            ->label('Street')
+                            ->default(fn ($record) => $record?->address?->street),
 
-                        Forms\Components\TextInput::make('address_number')
+                        Forms\Components\TextInput::make('address.address_number')
                             ->required()
-                            ->label('Number'),
+                            ->label('Number')
+                            ->default(fn ($record) => $record?->address?->address_number),
 
-                        Forms\Components\TextInput::make('complement')
-                            ->label('Complement'),
+                        Forms\Components\TextInput::make('address.complement')
+                            ->label('Complement')
+                            ->default(fn ($record) => $record?->address?->complement),
 
-                        Forms\Components\TextInput::make('neighborhood')
-                            ->label('Neighborhood'),
+                        Forms\Components\TextInput::make('address.neighborhood')
+                            ->label('Neighborhood')
+                            ->default(fn ($record) => $record?->address?->neighborhood),
 
-                        Forms\Components\Select::make('city_id')
-                            ->label('Select City')
-                            ->options(City::all()->pluck('name', 'id'))
-                            ->required(),
-
+                        Forms\Components\Select::make('address.city_id')
+                            ->relationship('address.city', 'name')
+                            ->required()
+                            ->label('City')
+                            ->default(fn ($record) => $record?->address?->city_id),
                     ])
                     ->columns(2)
                     ->label('Address Information'),
