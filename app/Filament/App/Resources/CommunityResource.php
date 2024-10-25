@@ -74,7 +74,7 @@ class CommunityResource extends Resource
 
                 Forms\Components\Fieldset::make('Address Information')
                     ->schema([
-                        Forms\Components\TextInput::make('address.postal_code')
+                        Forms\Components\TextInput::make('postal_code')
                             ->label('Postal Code')
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
@@ -103,21 +103,21 @@ class CommunityResource extends Resource
                                 }
                             }),
 
-                        Forms\Components\TextInput::make('address.street')
+                        Forms\Components\TextInput::make('street')
                             ->required()
                             ->label('Street'),
 
-                        Forms\Components\TextInput::make('address.address_number')
+                        Forms\Components\TextInput::make('address_number')
                             ->required()
                             ->label('Number'),
 
-                        Forms\Components\TextInput::make('address.complement')
+                        Forms\Components\TextInput::make('complement')
                             ->label('Complement'),
 
-                        Forms\Components\TextInput::make('address.neighborhood')
+                        Forms\Components\TextInput::make('neighborhood')
                             ->label('Neighborhood'),
 
-                        Forms\Components\Select::make('address.city_id')
+                        Forms\Components\Select::make('city_id')
                             ->label('Select City')
                             ->options(City::all()->pluck('name', 'id'))
                             ->required(),
