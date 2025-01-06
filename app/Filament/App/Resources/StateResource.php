@@ -1,34 +1,40 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\App\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Position;
+use App\Models\State;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Actions\EditAction;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\PositionResource\Pages;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use App\Filament\Resources\App\StateResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\PositionResource\RelationManagers;
+use App\Filament\App\Resources\StateResource\Pages\EditState;
+use App\Filament\App\Resources\StateResource\Pages\ListStates;
+use App\Filament\Resources\App\StateResource\RelationManagers;
+use App\Filament\App\Resources\StateResource\Pages\CreateState;
 
-class PositionResource extends Resource
+class StateResource extends Resource
 {
-    protected static ?string $model = Position::class;
+    protected static ?string $model = State::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    
     public static function getNavigationGroup(): ?string
     {
         return __('menu.Registration');
     }
 
+    protected static ?string $navigationIcon = 'heroicon-o-map';
+
     public static function getModelLabel(): string
     {
-        return __('Position');
+        return __('State');
     }
 
     public static function form(Form $form): Form
@@ -38,6 +44,9 @@ class PositionResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('abbreviation')
+                    ->required()
+                    ->maxLength(2),
             ]);
     }
 
@@ -46,6 +55,8 @@ class PositionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('abbreviation')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -79,9 +90,9 @@ class PositionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPositions::route('/'),
-            'create' => Pages\CreatePosition::route('/create'),
-            'edit' => Pages\EditPosition::route('/{record}/edit'),
+            'index' => ListStates::route('/'),
+            'create' => CreateState::route('/create'),
+            'edit' => EditState::route('/{record}/edit'),
         ];
     }
 }

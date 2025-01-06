@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Filament\Resources\CityResource\Pages;
 
-use App\Filament\Resources\CityResource;
+namespace App\Filament\App\Resources\CityResource\Pages;
+
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\App\Resources\CityResource;
 
 class ListCities extends ListRecords
 {

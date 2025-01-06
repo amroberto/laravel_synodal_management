@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\StateResource\Pages;
+namespace App\Filament\App\Resources\StateResource\Pages;
 
-use App\Filament\Resources\StateResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\App\Resources\StateResource;
 
 class ListStates extends ListRecords
 {

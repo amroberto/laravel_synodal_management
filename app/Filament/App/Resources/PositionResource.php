@@ -1,32 +1,39 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\App\Resources;
 
-use App\Filament\Resources\StateResource\Pages;
-use App\Filament\Resources\StateResource\RelationManagers;
-use App\Models\State;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Position;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Actions\EditAction;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\App\PositionResource\RelationManagers;
+use App\Filament\App\Resources\PositionResource\Pages\EditPosition;
+use App\Filament\App\Resources\PositionResource\Pages\ListPositions;
+use App\Filament\App\Resources\PositionResource\Pages\CreatePosition;
 
-class StateResource extends Resource
+class PositionResource extends Resource
 {
-    protected static ?string $model = State::class;
+    protected static ?string $model = Position::class;
 
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    
     public static function getNavigationGroup(): ?string
     {
         return __('menu.Registration');
     }
 
-    protected static ?string $navigationIcon = 'heroicon-o-map';
-
     public static function getModelLabel(): string
     {
-        return __('State');
+        return __('Position');
     }
 
     public static function form(Form $form): Form
@@ -36,9 +43,6 @@ class StateResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('abbreviation')
-                    ->required()
-                    ->maxLength(2),
             ]);
     }
 
@@ -47,8 +51,6 @@ class StateResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('abbreviation')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -82,9 +84,9 @@ class StateResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListStates::route('/'),
-            'create' => Pages\CreateState::route('/create'),
-            'edit' => Pages\EditState::route('/{record}/edit'),
+            'index' => ListPositions::route('/'),
+            'create' => CreatePosition::route('/create'),
+            'edit' => EditPosition::route('/{record}/edit'),
         ];
     }
 }

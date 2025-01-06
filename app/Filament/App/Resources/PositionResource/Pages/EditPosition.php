@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\PositionResource\Pages;
+namespace App\Filament\App\Resources\PositionResource\Pages;
 
-use App\Filament\Resources\PositionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\App\Resources\PositionResource;
 
 class EditPosition extends EditRecord
 {
