@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Address;
 use App\Models\Community;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Leadership extends Model
@@ -12,16 +14,17 @@ class Leadership extends Model
 
     protected $fillable = [
         'name',
-        'is_actice',
-        'birthdate',
-        'gender',
         'community_id',
+        'birthdate',
+        'is_active',
+        'gender',
         'mobile',
         'business_phone',
         'home_phone',
         'email',
-        'address_id',
         'photo',
+        'address',
+        'address_id',
     ];
 
     /**
@@ -32,12 +35,30 @@ class Leadership extends Model
     protected function casts(): array
     {
         return [
-            'gender' => 'boolean',
+            'birthdate' => 'date',
+            'is_active' => 'boolean',
+            'gender' => 'string',
+            'address' => 'string',
         ];
     }
 
-    public function addresses()
+    /**
+     * @return BelongsTo
+     */
+    public function address(): BelongsTo
     {
-        return $this->hasMany(Address::class);
-    }
+        return $this->belongsTo(Address::class);
+    } 
+
+    /**
+     * [Description for community]
+     *
+     * @return BelongsTo
+     * 
+     */
+    public function community(): BelongsTo
+    {
+        return $this->belongsTo(Community::class);
+    } 
+
 }

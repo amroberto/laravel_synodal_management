@@ -79,7 +79,9 @@ class CommunityResource extends Resource
                             ->label('Tipo de Unidade'),
 
                         Forms\Components\TextInput::make('phone')
-                            ->label('Telefone'),
+                            ->label('Telefone')
+                            ->mask('(99) 99999-9999')// Aplica a máscara diretamente
+                            ->tel(),
 
                         Forms\Components\TextInput::make('email')
                             ->label('E-mail'),
