@@ -26,7 +26,6 @@ class Community extends Model
         'unity_type' => UnityTypeEnum::class,
     ];
 
-
     /**
      * @return BelongsTo
      */

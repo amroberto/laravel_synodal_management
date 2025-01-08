@@ -2,8 +2,9 @@
 
 namespace App\Filament\App\Resources\CommunityResource\Pages;
 
-use App\Filament\App\Resources\CommunityResource;
+use App\Models\Community;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\App\Resources\CommunityResource;
 
 class EditCommunity extends EditRecord
 {
@@ -38,10 +39,15 @@ class EditCommunity extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
+        // Carregar os relacionamentos necessários
+        $community = Community::with('address.city.state.country')->find($data['id']);
+        
         // Preenche os dados do endereço da comunidade no formulário
         if ($this->record->address) {
             $data['address'] = [
                 'postal_code' => $this->record->address->postal_code,
+                'state_id' => $this->record->address->city->state->id,
+                'country_id' => $this->record->address->city->state->country->id,
                 'city_id' => $this->record->address->city_id,
                 'street' => $this->record->address->street,
                 'neighborhood' => $this->record->address->neighborhood,

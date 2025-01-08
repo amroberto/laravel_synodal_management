@@ -32,7 +32,10 @@ class Address extends Model
     }
 
     /**
-     * @return BelongsTo
+     * [Description for community]
+     *
+     * @return HasOne
+     * 
      */
     public function community(): HasOne
     {

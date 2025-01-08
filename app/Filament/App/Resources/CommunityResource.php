@@ -3,20 +3,30 @@
 namespace App\Filament\App\Resources;
 
 use Filament\Forms;
-use Filament\Tables;
+use TextInput\Mask;
 use App\Models\City;
+use Filament\Tables;
+use App\Models\State;
 use App\Models\Address;
-use App\Models\Community;
+use App\Models\Country;
 use Filament\Forms\Form;
+use App\Models\Community;
 use Filament\Tables\Table;
+use Filament\Support\RawJs;
 use App\Enums\UnityTypeEnum;
 use Forms\Components\Select;
 use App\Services\ViaCepService;
+use Filament\Actions\EditAction;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Fieldset;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\App\Resources\CommunityResource\Pages;
+use App\Filament\App\Resources\CommunityResource\Pages\EditCommunity;
+use App\Filament\App\Resources\CommunityResource\Pages\CreateCommunity;
+use App\Filament\App\Resources\CommunityResource\Pages\ListCommunities;
 
 class CommunityResource extends Resource
 {
@@ -38,56 +48,63 @@ class CommunityResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Fieldset::make('Community Information')
+                Forms\Components\Fieldset::make('Informações da Comunidade')
                     ->schema([
                         Forms\Components\TextInput::make('corporate_name')
                             ->required()
-                            ->label('Corporate Name'),
+                            ->label('Razão Social'),
 
                         Forms\Components\TextInput::make('fantasy_name')
-                            ->label('Fantasy Name'),
+                            ->label('Nome Fantasia'),
 
                         Forms\Components\TextInput::make('document')
+                            ->label('CNPJ')
                             ->required()
-                            ->label('Document'),
+                            ->mask('99.999.999/9999-99')
+                            ->rule('cnpj')
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                // Remove todos os caracteres não numéricos
+                                $numericCNPJ = preg_replace('/\D/', '', $state);
+                                $set('cnpj', $numericCNPJ);
+                            }),
 
                         Forms\Components\Select::make('unity_type')
                             ->options([
-                                UnityTypeEnum::PreachingPoint->value => 'Preaching Point',
-                                UnityTypeEnum::Community->value => 'Community',
-                                UnityTypeEnum::Parish->value => 'Parish',
+                                UnityTypeEnum::PreachingPoint->value => 'Ponto de Pregação',
+                                UnityTypeEnum::Community->value => 'Comunidade',
+                                UnityTypeEnum::Parish->value => 'Paróquia',
                             ])
                             ->default(UnityTypeEnum::Community->value)
                             ->required()
-                            ->label('Unity Type'),
+                            ->label('Tipo de Unidade'),
 
                         Forms\Components\TextInput::make('phone')
-                            ->label('Phone'),
+                            ->label('Telefone'),
 
                         Forms\Components\TextInput::make('email')
-                            ->label('Email'),
+                            ->label('E-mail'),
 
                         Forms\Components\Hidden::make('address_id')
                     ])
                     ->columns(2)
-                    ->label('Community Information'),
+                    ->label('Informações da Comunidade'),
 
-                Forms\Components\Fieldset::make('Address Information')
+                Forms\Components\Fieldset::make('Informações de Endereço')
                     ->schema([
                         Forms\Components\TextInput::make('address.postal_code')
-                            ->label('Postal Code')
+                            ->label('CEP')
                             ->default(fn ($record) => $record?->address?->postal_code)
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
                                 if (!empty($state)) {
                                     $viaCepService = app(ViaCepService::class);
                                     $data = $viaCepService->consultarCep($state);
-                                    
+
                                     if ($data) {
                                         $set('address.street', $data['logradouro'] ?? null);
                                         $set('address.neighborhood', $data['bairro'] ?? null);
 
-                                        $city = \App\Models\City::where('name', $data['localidade'])
+                                        $city = City::where('name', $data['localidade'])
                                             ->whereHas('state', function ($query) use ($data) {
                                                 $query->where('abbreviation', $data['uf']);
                                             })
@@ -95,37 +112,73 @@ class CommunityResource extends Resource
 
                                         if ($city) {
                                             $set('address.city_id', $city->id);
+                                            $set('address.state_id', $city->state_id);
+                                            $set('address.country_id', $city->state->country_id);
                                         }
                                     }
                                 }
                             }),
 
+                        Forms\Components\Select::make('address.country_id')
+                            ->label('País')
+                            ->default(fn ($record) => $record?->address?->city?->state?->country?->id)
+                            ->options(Country::all()->pluck('name', 'id')->toArray())
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                $set('address.state_id', null);
+                                $set('address.city_id', null);
+                            })
+                            ->required(),
+
+                        Forms\Components\Select::make('address.state_id')
+                            ->label('Estado')
+                            ->default(fn ($record) => $record?->address?->city?->state?->id)
+                            ->options(function (callable $get) {
+                                $country = $get('address.country_id');
+                                if ($country) {
+                                    return State::where('country_id', $country)->pluck('name', 'id');
+                                }
+                                return [];
+                            })
+                            ->default(fn ($record) => $record?->address?->city->state?->id)
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                $set('address.city_id', null);
+                            })
+                            ->required(),
+
+                        Forms\Components\Select::make('address.city_id')
+                            ->label('Cidade')
+                            ->default(fn ($record) => $record?->address?->city_id)
+                            ->options(function (callable $get) {
+                                $state = $get('address.state_id');
+                                if ($state) {
+                                    return City::where('state_id', $state)->pluck('name', 'id');
+                                }
+                                return [];
+                            })
+                            ->required(),
+
                         Forms\Components\TextInput::make('address.street')
                             ->required()
-                            ->label('Street')
+                            ->label('Rua')
                             ->default(fn ($record) => $record?->address?->street),
 
                         Forms\Components\TextInput::make('address.address_number')
                             ->required()
-                            ->label('Number')
+                            ->label('Número')
                             ->default(fn ($record) => $record?->address?->address_number),
 
                         Forms\Components\TextInput::make('address.complement')
-                            ->label('Complement')
+                            ->label('Complemento')
                             ->default(fn ($record) => $record?->address?->complement),
 
                         Forms\Components\TextInput::make('address.neighborhood')
-                            ->label('Neighborhood')
+                            ->label('Bairro')
                             ->default(fn ($record) => $record?->address?->neighborhood),
-
-                        Forms\Components\Select::make('address.city_id')
-                            ->relationship('address.city', 'name')
-                            ->required()
-                            ->label('City')
-                            ->default(fn ($record) => $record?->address?->city_id),
                     ])
                     ->columns(2)
-                    ->label('Address Information'),
+                    ->label('Informações de Endereço'),
             ]);
     }
 
