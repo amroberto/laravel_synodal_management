@@ -23,7 +23,6 @@ class Leadership extends Model
         'home_phone',
         'email',
         'photo',
-        'address',
         'address_id',
     ];
 
@@ -38,7 +37,6 @@ class Leadership extends Model
             'birthdate' => 'date',
             'is_active' => 'boolean',
             'gender' => 'string',
-            'address' => 'string',
         ];
     }
 

@@ -72,11 +72,11 @@ class LeadershipResource extends Resource
                         ->label('Ativo')
                         ->default(true),
 
-                    Forms\Components\Select::make('gender')
+                        Forms\Components\Select::make('gender')
                         ->label('Gênero')
                         ->options([
-                            'male' => 'Masculino',
-                            'female' => 'Feminino',
+                            'Male' => 'Masculino',
+                            'Female' => 'Feminino',
                         ])
                         ->required(),
 
@@ -116,10 +116,11 @@ class LeadershipResource extends Resource
                 ->columns(2)
                 ->label('Informações da Liderança'),
 
-            Forms\Components\Fieldset::make('Informações de Endereço')
+                Forms\Components\Fieldset::make('Informações de Endereço')
                 ->schema([
                     Forms\Components\TextInput::make('address.postal_code')
                         ->label('CEP')
+                        ->mask('99999-999')
                         ->default(fn ($record) => $record?->address?->postal_code)
                         ->reactive()
                         ->afterStateUpdated(function ($state, callable $set) {
@@ -207,7 +208,6 @@ class LeadershipResource extends Resource
                 ->columns(2)
                 ->label('Informações de Endereço'),
         ]);
-
     }
 
     public static function table(Table $table): Table

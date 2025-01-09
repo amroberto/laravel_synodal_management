@@ -2,7 +2,6 @@
 
 namespace App\Filament\App\Resources\LeadershipResource\Pages;
 
-use Filament\Actions;
 use App\Models\Leadership;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\App\Resources\LeadershipResource;
@@ -11,13 +10,13 @@ class EditLeadership extends EditRecord
 {
     protected static string $resource = LeadershipResource::class;
 
-    protected function getHeaderActions(): array
+    // Corrige a assinatura do método mount para aceitar o parâmetro correto
+    public function mount(string|int $record): void
     {
-        return [
-            Actions\DeleteAction::make(),
-        ];
+        // Certifique-se de passar o record para a classe pai
+        parent::mount($record);
     }
-
+    
     protected function mutateFormDataBeforeSave(array $data): array
     {
         // Se a comunidade tiver um endereço existente, ele é atualizado
@@ -41,7 +40,7 @@ class EditLeadership extends EditRecord
     protected function mutateFormDataBeforeFill(array $data): array
     {
         // Carregar os relacionamentos necessários
-        $leadership = Leadership::with('address.city.state.country')->find($data['id']);
+        $data['leathership'] = Leadership::with('address.city.state.country')->find($data['id']);
         
         // Preenche os dados do endereço da comunidade no formulário
         if ($this->record->address) {

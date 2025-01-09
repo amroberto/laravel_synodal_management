@@ -95,6 +95,7 @@ class CommunityResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('address.postal_code')
                             ->label('CEP')
+                            ->mask('99999-999')
                             ->default(fn ($record) => $record?->address?->postal_code)
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {

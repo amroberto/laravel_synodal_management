@@ -32,26 +32,18 @@ class Address extends Model
     }
 
     /**
-     * [Description for community]
-     *
-     * @return HasOne
-     * 
+     * @return BelongsTo
      */
     public function community(): HasOne
     {
         return $this->hasOne(Community::class);
     }
 
-
     /**
-     * [Description for leadership]
-     *
-     * @return HasOne
-     * 
+     * @return BelongsTo
      */
-    public function leadership(): HasOne
+    public function leadership(): BelongsTo
     {
-        return $this->hasOne(Leadership::class);
+        return $this->belongsTo(Leadership::class);
     }
-
 }

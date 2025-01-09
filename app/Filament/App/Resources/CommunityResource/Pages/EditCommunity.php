@@ -40,7 +40,7 @@ class EditCommunity extends EditRecord
     protected function mutateFormDataBeforeFill(array $data): array
     {
         // Carregar os relacionamentos necessários
-        $community = Community::with('address.city.state.country')->find($data['id']);
+        $data['community'] = Community::with('address.city.state.country')->find($data['id']);
         
         // Preenche os dados do endereço da comunidade no formulário
         if ($this->record->address) {
