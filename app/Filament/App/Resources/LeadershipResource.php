@@ -52,162 +52,164 @@ class LeadershipResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            Forms\Components\Fieldset::make('Informações da Liderança')
-                ->schema([
-                    Forms\Components\TextInput::make('name')
-                        ->label('Nome')
-                        ->required(),
+            ->schema([
+                Forms\Components\Fieldset::make('Informações da Liderança')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nome')
+                            ->required(),
 
-                    Forms\Components\Select::make('community_id')
-                    ->label('Comunidade')
-                    ->relationship('community', 'fantasy_name')
-                    ->required(),
+                        Forms\Components\Select::make('community_id')
+                            ->label('Comunidade')
+                            ->relationship('community', 'fantasy_name')
+                            ->required(),
 
-                    Forms\Components\DatePicker::make('birthdate')
-                        ->label('Data de Nascimento')
-                        ->required(),
+                        Forms\Components\DatePicker::make('birthdate')
+                            ->label('Data de Nascimento')
+                            ->required(),
 
-                    Forms\Components\Toggle::make('is_active')
-                        ->label('Ativo')
-                        ->default(true),
+                        Forms\Components\Toggle::make('is_active')
+                            ->label('Ativo')
+                            ->default(true),
 
                         Forms\Components\Select::make('gender')
-                        ->label('Gênero')
-                        ->options([
-                            'Male' => 'Masculino',
-                            'Female' => 'Feminino',
-                        ])
-                        ->required(),
+                            ->label('Gênero')
+                            ->options([
+                                'Male' => 'Masculino',
+                                'Female' => 'Feminino',
+                            ])
+                            ->required(),
 
-                    Forms\Components\TextInput::make('mobile')
-                        ->label('Celular')
-                        ->mask('(99) 99999-9999') // Aplica a máscara diretamente
-                        ->tel()
-                        ->required(),
+                        Forms\Components\TextInput::make('mobile')
+                            ->label('Celular')
+                            ->mask('(99) 99999-9999') // Aplica a máscara diretamente
+                            ->tel()
+                            ->required(),
 
-                    Forms\Components\TextInput::make('business_phone')
-                        ->label('Telefone Comercial')
-                        ->mask('(99) 9999-9999') // Aplica a máscara diretamente
-                        ->tel()
-                        ->required(),
+                        Forms\Components\TextInput::make('business_phone')
+                            ->label('Telefone Comercial')
+                            ->mask('(99) 9999-9999') // Aplica a máscara diretamente
+                            ->tel()
+                            ->required(),
 
-                    Forms\Components\TextInput::make('home_phone')
-                        ->label('Telefone Residencial')
-                        ->mask('(99) 9999-9999') // Aplica a máscara diretamente
-                        ->tel()
-                        ->required(),
+                        Forms\Components\TextInput::make('home_phone')
+                            ->label('Telefone Residencial')
+                            ->mask('(99) 9999-9999') // Aplica a máscara diretamente
+                            ->tel()
+                            ->required(),
 
-                    Forms\Components\TextInput::make('email')
-                        ->label('E-mail')
-                        ->email()
-                        ->required(),
+                        Forms\Components\TextInput::make('email')
+                            ->label('E-mail')
+                            ->email()
+                            ->required(),
 
-                    Forms\Components\FileUpload::make('photo')
-                    ->label('Foto')
-                    ->image()
-                    ->rules(['mimes:jpeg,png,jpg,gif,svg'])
-                    ->disk('public')
-                    ->directory('photos')
-                    ->visibility('public'),
+                        Forms\Components\FileUpload::make('photo')
+                            ->label('Foto')
+                            ->image()
+                            ->rules(['mimes:jpeg,png,jpg,gif,svg'])
+                            ->disk('public')
+                            ->directory('photos')
+                            ->visibility('public'),
 
-                    Forms\Components\Hidden::make('address_id')
-                ])
-                ->columns(2)
-                ->label('Informações da Liderança'),
+                        Forms\Components\Hidden::make('address_id')
+                    ])
+                    ->columns(2)
+                    ->label('Informações da Liderança'),
 
                 Forms\Components\Fieldset::make('Informações de Endereço')
-                ->schema([
-                    Forms\Components\TextInput::make('address.postal_code')
-                        ->label('CEP')
-                        ->mask('99999-999')
-                        ->default(fn ($record) => $record?->address?->postal_code)
-                        ->reactive()
-                        ->afterStateUpdated(function ($state, callable $set) {
-                            if (!empty($state)) {
-                                $viaCepService = app(ViaCepService::class);
-                                $data = $viaCepService->consultarCep($state);
+                    ->schema([
+                        Forms\Components\TextInput::make('address.postal_code')
+                            ->label('CEP')
+                            ->mask('99999-999')
+                            ->default(fn($record) => $record?->address?->postal_code)
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                if (!empty($state)) {
+                                    $viaCepService = app(ViaCepService::class);
+                                    $data = $viaCepService->consultarCep($state);
 
-                                if ($data) {
-                                    $set('address.street', $data['logradouro'] ?? null);
-                                    $set('address.neighborhood', $data['bairro'] ?? null);
+                                    if ($data && isset($data['localidade'], $data['uf'])) {
+                                        $set('address.street', $data['logradouro'] ?? null);
+                                        $set('address.neighborhood', $data['bairro'] ?? null);
 
-                                    $city = City::where('name', $data['localidade'])
-                                        ->whereHas('state', function ($query) use ($data) {
-                                            $query->where('abbreviation', $data['uf']);
-                                        })
-                                        ->first();
+                                        $city = City::where('name', $data['localidade'])
+                                            ->whereHas('state', function ($query) use ($data) {
+                                                $query->where('abbreviation', $data['uf']);
+                                            })
+                                            ->first();
 
-                                    if ($city) {
-                                        $set('address.city_id', $city->id);
-                                        $set('address.state_id', $city->state_id);
-                                        $set('address.country_id', $city->state->country_id);
+                                        if ($city) {
+                                            $set('address.city_id', $city->id);
+                                            $set('address.state_id', $city->state_id);
+                                            $set('address.country_id', $city->state->country_id);
+                                        } else {
+                                            // Log ou mensagem de erro para CEP inválido
+                                        }
                                     }
                                 }
-                            }
-                        }),
+                            }),
 
-                    Forms\Components\Select::make('address.country_id')
-                        ->label('País')
-                        ->default(fn ($record) => $record?->address?->city?->state?->country?->id)
-                        ->options(Country::all()->pluck('name', 'id')->toArray())
-                        ->reactive()
-                        ->afterStateUpdated(function ($state, callable $set) {
-                            $set('address.state_id', null);
-                            $set('address.city_id', null);
-                        })
-                        ->required(),
+                        Forms\Components\Select::make('address.country_id')
+                            ->label('País')
+                            ->default(fn($record) => $record?->address?->city?->state?->country?->id)
+                            ->options(Country::all()->pluck('name', 'id')->toArray())
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                $set('address.state_id', null);
+                                $set('address.city_id', null);
+                            })
+                            ->required(),
 
-                    Forms\Components\Select::make('address.state_id')
-                        ->label('Estado')
-                        ->default(fn ($record) => $record?->address?->city?->state?->id)
-                        ->options(function (callable $get) {
-                            $country = $get('address.country_id');
-                            if ($country) {
-                                return State::where('country_id', $country)->pluck('name', 'id');
-                            }
-                            return [];
-                        })
-                        ->default(fn ($record) => $record?->address?->city->state?->id)
-                        ->reactive()
-                        ->afterStateUpdated(function ($state, callable $set) {
-                            $set('address.city_id', null);
-                        })
-                        ->required(),
+                        Forms\Components\Select::make('address.state_id')
+                            ->label('Estado')
+                            ->default(fn($record) => $record?->address?->city?->state?->id)
+                            ->options(function (callable $get) {
+                                $country = $get('address.country_id');
+                                if ($country) {
+                                    return State::where('country_id', $country)->pluck('name', 'id');
+                                }
+                                return [];
+                            })
+                            ->default(fn($record) => $record?->address?->city->state?->id)
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                $set('address.city_id', null);
+                            })
+                            ->required(),
 
-                    Forms\Components\Select::make('address.city_id')
-                        ->label('Cidade')
-                        ->default(fn ($record) => $record?->address?->city_id)
-                        ->options(function (callable $get) {
-                            $state = $get('address.state_id');
-                            if ($state) {
-                                return City::where('state_id', $state)->pluck('name', 'id');
-                            }
-                            return [];
-                        })
-                        ->required(),
+                        Forms\Components\Select::make('address.city_id')
+                            ->label('Cidade')
+                            ->default(fn($record) => $record?->address?->city_id)
+                            ->options(function (callable $get) {
+                                $state = $get('address.state_id');
+                                if ($state) {
+                                    return City::where('state_id', $state)->pluck('name', 'id');
+                                }
+                                return [];
+                            })
+                            ->required(),
 
-                    Forms\Components\TextInput::make('address.street')
-                        ->required()
-                        ->label('Rua')
-                        ->default(fn ($record) => $record?->address?->street),
+                        Forms\Components\TextInput::make('address.street')
+                            ->required()
+                            ->label('Rua')
+                            ->default(fn($record) => $record?->address?->street),
 
-                    Forms\Components\TextInput::make('address.address_number')
-                        ->required()
-                        ->label('Número')
-                        ->default(fn ($record) => $record?->address?->address_number),
+                        Forms\Components\TextInput::make('address.address_number')
+                            ->required()
+                            ->label('Número')
+                            ->default(fn($record) => $record?->address?->address_number),
 
-                    Forms\Components\TextInput::make('address.complement')
-                        ->label('Complemento')
-                        ->default(fn ($record) => $record?->address?->complement),
+                        Forms\Components\TextInput::make('address.complement')
+                            ->label('Complemento')
+                            ->default(fn($record) => $record?->address?->complement),
 
-                    Forms\Components\TextInput::make('address.neighborhood')
-                        ->label('Bairro')
-                        ->default(fn ($record) => $record?->address?->neighborhood),
-                ])
-                ->columns(2)
-                ->label('Informações de Endereço'),
-        ]);
+                        Forms\Components\TextInput::make('address.neighborhood')
+                            ->label('Bairro')
+                            ->default(fn($record) => $record?->address?->neighborhood),
+                    ])
+                    ->columns(2)
+                    ->label('Informações de Endereço'),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -221,13 +223,13 @@ class LeadershipResource extends Resource
                     ->dateTime('d/m/Y'),
                 Tables\Columns\TextColumn::make('mobile')
                     ->label('Celular')
-                    ->formatStateUsing(fn (string $state): string => formatPhoneNumber($state)),
+                    ->formatStateUsing(fn(string $state): string => formatPhoneNumber($state)),
                 Tables\Columns\TextColumn::make('business_phone')
                     ->label('Telefone Comercial')
-                    ->formatStateUsing(fn (string $state): string => formatPhoneNumber($state)),
+                    ->formatStateUsing(fn(string $state): string => formatPhoneNumber($state)),
                 Tables\Columns\TextColumn::make('home_phone')
                     ->label('Telefone Residencial')
-                    ->formatStateUsing(fn (string $state): string => formatPhoneNumber($state)),
+                    ->formatStateUsing(fn(string $state): string => formatPhoneNumber($state)),
                 Tables\Columns\TextColumn::make('email')
                     ->label('E-mail'),
             ])
