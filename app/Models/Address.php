@@ -26,7 +26,7 @@ class Address extends Model
     /**
      * @return BelongsTo
      */
-    public function city(): BelongsTo
+    public function city():BelongsTo
     {
         return $this->belongsTo(City::class);
     }

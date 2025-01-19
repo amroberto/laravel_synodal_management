@@ -15,7 +15,7 @@ class CreateLeadership extends CreateRecord
     {
         // Verificar se o endereço existe no array 'address'
         if (isset($data['address']) && !empty($data['address'])) {
-            // Criar o endereço na tabela de addresses com os dados do array 'address'
+            
             $address = Address::create([
                 'postal_code'      => $data['address']['postal_code'],
                 'city_id'          => $data['address']['city_id'],

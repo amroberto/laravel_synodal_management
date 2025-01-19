@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Models\Address;
+use App\Models\Leadership;
 use App\Enums\UnityTypeEnum;
+use App\Models\CommunityLeadership;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Community extends Model
 {
@@ -35,15 +38,15 @@ class Community extends Model
     {
         return $this->belongsTo(Address::class);
     } 
-    
-   /**
-    * [Description for leadershipies]
-    *
-    * @return HasMany
-    * 
-    */
-   public function leaderships(): HasMany
-   {
-       return $this->hasMany(Leadership::class);
-   }
+
+    /**
+     * [Description for communityLeaderships]
+     *
+     * @return HasMany
+     * 
+     */
+    public function communityLeaderships():HasMany
+    {
+        return $this->hasMany(CommunityLeadership::class);
+    }
 }

@@ -18,9 +18,12 @@ class City extends Model
     ];
 
     /**
+     * [Description for state]
+     *
      * @return BelongsTo
+     * 
      */
-    public function state(): BelongsTo
+    public function state():BelongsTo
     {
         return $this->belongsTo(State::class);
     }

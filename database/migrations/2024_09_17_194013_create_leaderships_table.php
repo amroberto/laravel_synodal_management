@@ -19,10 +19,10 @@ return new class extends Migration
             $table->date('birthdate');
             $table->enum('gender', GenderEnum::values());
             $table->foreignId('community_id')->constrained()->onDelete('cascade');
-            $table->string('mobile');
-            $table->string('business_phone');
-            $table->string('home_phone');
-            $table->string('email');
+            $table->string('mobile')->nullable();
+            $table->string('business_phone')->nullable();
+            $table->string('home_phone')->nullable();
+            $table->string('email')->nullable();
             $table->string('photo')->nullable(); 
             $table->foreignId('address_id')->constrained()->onDelete('cascade');                
             $table->timestamps();

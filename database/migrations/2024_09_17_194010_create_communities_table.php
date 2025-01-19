@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('fantasy_name');
             $table->string('document');
             $table->enum('unity_type', UnityTypeEnum::values())->default(UnityTypeEnum::Community->value);
-            $table->string('phone');
-            $table->string('email');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->foreignId('address_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

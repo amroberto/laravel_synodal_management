@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\Address;
+use App\Models\Position;
 use App\Models\Community;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Leadership extends Model
 {
@@ -46,17 +48,30 @@ class Leadership extends Model
     public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class);
-    } 
+    }
 
     /**
-     * [Description for community]
+     * [Description for communities]
      *
-     * @return BelongsTo
+     * @return BelongsToMany
      * 
      */
-    public function community(): BelongsTo
+    public function communities(): BelongsToMany
     {
-        return $this->belongsTo(Community::class);
-    } 
+        return $this->belongsToMany(Community::class, 'community_leadership')
+            ->withPivot('position_id')
+            ->withTimestamps();
+    }
 
+    /**
+     * [Description for positions]
+     *
+     * @return BelongsToMany
+     * 
+     */
+    public function positions(): BelongsToMany
+    {
+        return $this->belongsToMany(Position::class, 'community_leaderships')
+            ->withTimestamps();
+    }
 }

@@ -9,18 +9,19 @@ use App\Models\State;
 use App\Models\Address;
 use App\Models\Country;
 use Filament\Forms\Form;
+use App\Models\Community;
 use App\Models\Leadership;
 use Filament\Tables\Table;
 use App\Services\ViaCepService;
 use Filament\Actions\EditAction;
-use Filament\Resources\Resource;
 //use Forms\Components\TextInput\Mask;
-use Filament\Forms\Components\TextInput;
+use Filament\Resources\Resource;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
@@ -61,7 +62,7 @@ class LeadershipResource extends Resource
 
                         Forms\Components\Select::make('community_id')
                             ->label('Comunidade')
-                            ->relationship('community', 'fantasy_name')
+                            ->options(Community::all()->pluck('fantasy_name', 'id'))
                             ->required(),
 
                         Forms\Components\DatePicker::make('birthdate')
@@ -89,19 +90,16 @@ class LeadershipResource extends Resource
                         Forms\Components\TextInput::make('business_phone')
                             ->label('Telefone Comercial')
                             ->mask('(99) 9999-9999') // Aplica a máscara diretamente
-                            ->tel()
-                            ->required(),
+                            ->tel(),
 
                         Forms\Components\TextInput::make('home_phone')
                             ->label('Telefone Residencial')
                             ->mask('(99) 9999-9999') // Aplica a máscara diretamente
-                            ->tel()
-                            ->required(),
+                            ->tel(),
 
                         Forms\Components\TextInput::make('email')
                             ->label('E-mail')
-                            ->email()
-                            ->required(),
+                            ->email(),
 
                         Forms\Components\FileUpload::make('photo')
                             ->label('Foto')
@@ -128,7 +126,7 @@ class LeadershipResource extends Resource
                                     $viaCepService = app(ViaCepService::class);
                                     $data = $viaCepService->consultarCep($state);
 
-                                    if ($data && isset($data['localidade'], $data['uf'])) {
+                                    if ($data) {
                                         $set('address.street', $data['logradouro'] ?? null);
                                         $set('address.neighborhood', $data['bairro'] ?? null);
 
@@ -142,8 +140,6 @@ class LeadershipResource extends Resource
                                             $set('address.city_id', $city->id);
                                             $set('address.state_id', $city->state_id);
                                             $set('address.country_id', $city->state->country_id);
-                                        } else {
-                                            // Log ou mensagem de erro para CEP inválido
                                         }
                                     }
                                 }
@@ -179,7 +175,7 @@ class LeadershipResource extends Resource
 
                         Forms\Components\Select::make('address.city_id')
                             ->label('Cidade')
-                            ->default(fn($record) => $record?->address?->city_id)
+                            ->default(fn($record) => $record?->address?->city?->id)
                             ->options(function (callable $get) {
                                 $state = $get('address.state_id');
                                 if ($state) {
@@ -207,7 +203,7 @@ class LeadershipResource extends Resource
                             ->label('Bairro')
                             ->default(fn($record) => $record?->address?->neighborhood),
                     ])
-                    ->columns(2)
+                    ->columnSpanFull()
                     ->label('Informações de Endereço'),
             ]);
     }

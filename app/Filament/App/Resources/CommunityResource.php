@@ -3,30 +3,21 @@
 namespace App\Filament\App\Resources;
 
 use Filament\Forms;
-use TextInput\Mask;
 use App\Models\City;
 use Filament\Tables;
 use App\Models\State;
 use App\Models\Address;
 use App\Models\Country;
+use App\Models\Position;
 use Filament\Forms\Form;
 use App\Models\Community;
+use App\Models\Leadership;
 use Filament\Tables\Table;
-use Filament\Support\RawJs;
 use App\Enums\UnityTypeEnum;
-use Forms\Components\Select;
 use App\Services\ViaCepService;
-use Filament\Actions\EditAction;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Fieldset;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\App\Resources\CommunityResource\Pages;
-use App\Filament\App\Resources\CommunityResource\Pages\EditCommunity;
-use App\Filament\App\Resources\CommunityResource\Pages\CreateCommunity;
-use App\Filament\App\Resources\CommunityResource\Pages\ListCommunities;
+use App\Filament\App\Resources\ComunityResource\RelationManagers\LeadershipsRelationManager as RelationManagersLeadershipsRelationManager;
 
 class CommunityResource extends Resource
 {
@@ -80,7 +71,7 @@ class CommunityResource extends Resource
 
                         Forms\Components\TextInput::make('phone')
                             ->label('Telefone')
-                            ->mask('(99) 99999-9999')// Aplica a máscara diretamente
+                            ->mask('(99) 99999-9999') // Aplica a máscara diretamente
                             ->tel(),
 
                         Forms\Components\TextInput::make('email')
@@ -96,7 +87,7 @@ class CommunityResource extends Resource
                         Forms\Components\TextInput::make('address.postal_code')
                             ->label('CEP')
                             ->mask('99999-999')
-                            ->default(fn ($record) => $record?->address?->postal_code)
+                            ->default(fn($record) => $record?->address?->postal_code)
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
                                 if (!empty($state)) {
@@ -124,7 +115,7 @@ class CommunityResource extends Resource
 
                         Forms\Components\Select::make('address.country_id')
                             ->label('País')
-                            ->default(fn ($record) => $record?->address?->city?->state?->country?->id)
+                            ->default(fn($record) => $record?->address?->city?->state?->country?->id)
                             ->options(Country::all()->pluck('name', 'id')->toArray())
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
@@ -135,7 +126,7 @@ class CommunityResource extends Resource
 
                         Forms\Components\Select::make('address.state_id')
                             ->label('Estado')
-                            ->default(fn ($record) => $record?->address?->city?->state?->id)
+                            ->default(fn($record) => $record?->address?->city?->state?->id)
                             ->options(function (callable $get) {
                                 $country = $get('address.country_id');
                                 if ($country) {
@@ -143,7 +134,7 @@ class CommunityResource extends Resource
                                 }
                                 return [];
                             })
-                            ->default(fn ($record) => $record?->address?->city->state?->id)
+                            ->default(fn($record) => $record?->address?->city?->state?->id)
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
                                 $set('address.city_id', null);
@@ -152,7 +143,7 @@ class CommunityResource extends Resource
 
                         Forms\Components\Select::make('address.city_id')
                             ->label('Cidade')
-                            ->default(fn ($record) => $record?->address?->city_id)
+                            ->default(fn($record) => $record?->address?->city?->id) 
                             ->options(function (callable $get) {
                                 $state = $get('address.state_id');
                                 if ($state) {
@@ -165,23 +156,46 @@ class CommunityResource extends Resource
                         Forms\Components\TextInput::make('address.street')
                             ->required()
                             ->label('Rua')
-                            ->default(fn ($record) => $record?->address?->street),
+                            ->default(fn($record) => $record?->address?->street),
 
                         Forms\Components\TextInput::make('address.address_number')
                             ->required()
                             ->label('Número')
-                            ->default(fn ($record) => $record?->address?->address_number),
+                            ->default(fn($record) => $record?->address?->address_number),
 
                         Forms\Components\TextInput::make('address.complement')
                             ->label('Complemento')
-                            ->default(fn ($record) => $record?->address?->complement),
+                            ->default(fn($record) => $record?->address?->complement),
 
                         Forms\Components\TextInput::make('address.neighborhood')
                             ->label('Bairro')
-                            ->default(fn ($record) => $record?->address?->neighborhood),
+                            ->default(fn($record) => $record?->address?->neighborhood),
                     ])
                     ->columns(2)
                     ->label('Informações de Endereço'),
+                    
+                    Forms\Components\Fieldset::make('')
+                    ->schema([
+                        Forms\Components\Repeater::make('communityLeaderships')
+                            ->relationship()
+                            ->schema([
+                                Forms\Components\Select::make('leadership_id')
+                                    ->label('Leadership')
+                                    ->options(Leadership::query()->pluck('name', 'id')),
+                                    
+                                
+                                Forms\Components\Select::make('position_id')
+                                    ->label('Position')
+                                    ->options(Position::query()->pluck('name', 'id'))
+                                    
+                            ])
+                            ->columnSpan('full')
+                            ->defaultItems(1)
+                            ->columns(2)
+                    ])
+                    ->columns(2)
+                    ->columnSpan('full')
+
             ]);
     }
 
@@ -210,7 +224,7 @@ class CommunityResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            //RelationManagersLeadershipsRelationManager::class,
         ];
     }
 
@@ -229,7 +243,7 @@ class CommunityResource extends Resource
         if (!isset($data['address_id'])) {
             $address = Address::create([
                 'postal_code' => $data['address']['postal_code'],
-                'city_id' => $data['address']['city_id'],
+                'city_id' => $data['address']['city']['id'],
                 'street' => $data['address']['street'],
                 'neighborhood' => $data['address']['neighborhood'],
                 'address_number' => $data['address']['address_number'],

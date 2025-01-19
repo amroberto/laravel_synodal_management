@@ -25,7 +25,7 @@ class State extends Model
      * @return BelongsTo
      * 
      */
-    public function country(): BelongsTo
+    public function country():BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
@@ -36,7 +36,7 @@ class State extends Model
      * @return HasMany
      * 
      */
-    public function cities(): HasMany
+    public function cities():HasMany
     {
         return $this->hasMany(City::class);
     }
