@@ -106,8 +106,8 @@ class CommunityResource extends Resource
 
                                         if ($city) {
                                             $set('address.city_id', $city->id);
-                                            $set('address.state_id', $city->state_id);
-                                            $set('address.country_id', $city->state->country_id);
+                                            $set('address.state_id', $city->state->id);
+                                            $set('address.country_id', $city->state->country->id);
                                         }
                                     }
                                 }
@@ -122,6 +122,7 @@ class CommunityResource extends Resource
                                 $set('address.state_id', null);
                                 $set('address.city_id', null);
                             })
+                            ->searchable()
                             ->required(),
 
                         Forms\Components\Select::make('address.state_id')
@@ -139,10 +140,11 @@ class CommunityResource extends Resource
                             ->afterStateUpdated(function ($state, callable $set) {
                                 $set('address.city_id', null);
                             })
+                            ->searchable()
                             ->required(),
 
                         Forms\Components\Select::make('address.city_id')
-                            ->label('Cidade')
+                            ->label('City')
                             ->default(fn($record) => $record?->address?->city?->id) 
                             ->options(function (callable $get) {
                                 $state = $get('address.state_id');
@@ -151,28 +153,29 @@ class CommunityResource extends Resource
                                 }
                                 return [];
                             })
+                            ->searchable()
                             ->required(),
 
                         Forms\Components\TextInput::make('address.street')
                             ->required()
-                            ->label('Rua')
+                            ->label('Street')
                             ->default(fn($record) => $record?->address?->street),
 
                         Forms\Components\TextInput::make('address.address_number')
                             ->required()
-                            ->label('Número')
+                            ->label('Number')
                             ->default(fn($record) => $record?->address?->address_number),
 
                         Forms\Components\TextInput::make('address.complement')
-                            ->label('Complemento')
+                            ->label('Complement')
                             ->default(fn($record) => $record?->address?->complement),
 
                         Forms\Components\TextInput::make('address.neighborhood')
-                            ->label('Bairro')
+                            ->label('Neighborhood')
                             ->default(fn($record) => $record?->address?->neighborhood),
                     ])
                     ->columns(2)
-                    ->label('Informações de Endereço'),
+                    ->label('Address'),
                     
                     Forms\Components\Fieldset::make('')
                     ->schema([

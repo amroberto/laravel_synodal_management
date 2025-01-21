@@ -74,4 +74,15 @@ class Leadership extends Model
         return $this->belongsToMany(Position::class, 'community_leaderships')
             ->withTimestamps();
     }
+
+    /**
+     * [Description for community]
+     *
+     * @return BelongsTo
+     * 
+     */
+    public function community():BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Community::class);
+    }
 }

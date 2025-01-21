@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Resources;
 
+use Filament\Forms\Set;
 use Filament\Forms;
 use App\Models\City;
 use Filament\Tables;
@@ -14,7 +15,6 @@ use App\Models\Leadership;
 use Filament\Tables\Table;
 use App\Services\ViaCepService;
 use Filament\Actions\EditAction;
-//use Forms\Components\TextInput\Mask;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
@@ -121,20 +121,18 @@ class LeadershipResource extends Resource
                             ->mask('99999-999')
                             ->default(fn($record) => $record?->address?->postal_code)
                             ->reactive()
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            ->afterStateUpdated(function (Set $set, $state) {
                                 if (!empty($state)) {
                                     $viaCepService = app(ViaCepService::class);
                                     $data = $viaCepService->consultarCep($state);
+
+                                    //dd($data);
 
                                     if ($data) {
                                         $set('address.street', $data['logradouro'] ?? null);
                                         $set('address.neighborhood', $data['bairro'] ?? null);
 
-                                        $city = City::where('name', $data['localidade'])
-                                            ->whereHas('state', function ($query) use ($data) {
-                                                $query->where('abbreviation', $data['uf']);
-                                            })
-                                            ->first();
+                                        $city = City::where('ibge_code', '=', $data['ibge'])->first();
 
                                         if ($city) {
                                             $set('address.city_id', $city->id);
@@ -146,7 +144,7 @@ class LeadershipResource extends Resource
                             }),
 
                         Forms\Components\Select::make('address.country_id')
-                            ->label('País')
+                            ->label('Country')
                             ->default(fn($record) => $record?->address?->city?->state?->country?->id)
                             ->options(Country::all()->pluck('name', 'id')->toArray())
                             ->reactive()
@@ -154,10 +152,11 @@ class LeadershipResource extends Resource
                                 $set('address.state_id', null);
                                 $set('address.city_id', null);
                             })
+                            ->searchable()
                             ->required(),
 
                         Forms\Components\Select::make('address.state_id')
-                            ->label('Estado')
+                            ->label('State')
                             ->default(fn($record) => $record?->address?->city?->state?->id)
                             ->options(function (callable $get) {
                                 $country = $get('address.country_id');
@@ -166,16 +165,17 @@ class LeadershipResource extends Resource
                                 }
                                 return [];
                             })
-                            ->default(fn($record) => $record?->address?->city->state?->id)
                             ->reactive()
+                            ->searchable()
                             ->afterStateUpdated(function ($state, callable $set) {
                                 $set('address.city_id', null);
                             })
                             ->required(),
 
                         Forms\Components\Select::make('address.city_id')
-                            ->label('Cidade')
+                            ->label('City')
                             ->default(fn($record) => $record?->address?->city?->id)
+                            ->relationship('address.city', 'name')
                             ->options(function (callable $get) {
                                 $state = $get('address.state_id');
                                 if ($state) {
@@ -183,6 +183,8 @@ class LeadershipResource extends Resource
                                 }
                                 return [];
                             })
+                            ->reactive()
+                            ->searchable()
                             ->required(),
 
                         Forms\Components\TextInput::make('address.street')
@@ -214,17 +216,13 @@ class LeadershipResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nome'),
+                Tables\Columns\TextColumn::make('community.fantasy_name')
+                    ->label('Community'),
                 Tables\Columns\TextColumn::make('birthdate')
                     ->label('Data de Nascimento')
                     ->dateTime('d/m/Y'),
                 Tables\Columns\TextColumn::make('mobile')
                     ->label('Celular')
-                    ->formatStateUsing(fn(string $state): string => formatPhoneNumber($state)),
-                Tables\Columns\TextColumn::make('business_phone')
-                    ->label('Telefone Comercial')
-                    ->formatStateUsing(fn(string $state): string => formatPhoneNumber($state)),
-                Tables\Columns\TextColumn::make('home_phone')
-                    ->label('Telefone Residencial')
                     ->formatStateUsing(fn(string $state): string => formatPhoneNumber($state)),
                 Tables\Columns\TextColumn::make('email')
                     ->label('E-mail'),

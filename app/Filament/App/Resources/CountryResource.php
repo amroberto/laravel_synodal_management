@@ -24,9 +24,14 @@ class CountryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-        public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __('entities.country.singular');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('entities.country.plural'); // Chamando a tradução
     }
 
     public static function form(Form $form): Form
