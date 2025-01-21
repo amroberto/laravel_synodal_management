@@ -17,6 +17,7 @@ use App\Enums\UnityTypeEnum;
 use App\Services\ViaCepService;
 use Filament\Resources\Resource;
 use App\Filament\App\Resources\CommunityResource\Pages;
+use App\Filament\App\Resources\ComunityResource\RelationManagers\CommunityleadershipsRelationManager;
 use App\Filament\App\Resources\ComunityResource\RelationManagers\LeadershipsRelationManager as RelationManagersLeadershipsRelationManager;
 
 class CommunityResource extends Resource
@@ -176,29 +177,6 @@ class CommunityResource extends Resource
                     ])
                     ->columns(2)
                     ->label('Address'),
-                    
-                    Forms\Components\Fieldset::make('')
-                    ->schema([
-                        Forms\Components\Repeater::make('communityLeaderships')
-                            ->relationship()
-                            ->schema([
-                                Forms\Components\Select::make('leadership_id')
-                                    ->label('Leadership')
-                                    ->options(Leadership::query()->pluck('name', 'id')),
-                                    
-                                
-                                Forms\Components\Select::make('position_id')
-                                    ->label('Position')
-                                    ->options(Position::query()->pluck('name', 'id'))
-                                    
-                            ])
-                            ->columnSpan('full')
-                            ->defaultItems(1)
-                            ->columns(2)
-                    ])
-                    ->columns(2)
-                    ->columnSpan('full')
-
             ]);
     }
 
@@ -228,6 +206,7 @@ class CommunityResource extends Resource
     {
         return [
             //RelationManagersLeadershipsRelationManager::class,
+            CommunityleadershipsRelationManager::class,
         ];
     }
 
