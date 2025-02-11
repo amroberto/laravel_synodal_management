@@ -215,16 +215,20 @@ class LeadershipResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nome'),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('community.fantasy_name')
+                    ->searchable()
                     ->label('Community'),
                 Tables\Columns\TextColumn::make('birthdate')
+                    ->searchable()    
                     ->label('Data de Nascimento')
                     ->dateTime('d/m/Y'),
                 Tables\Columns\TextColumn::make('mobile')
                     ->label('Celular')
+                    ->searchable()
                     ->formatStateUsing(fn(string $state): string => formatPhoneNumber($state)),
                 Tables\Columns\TextColumn::make('email')
+                    ->searchable()
                     ->label('E-mail'),
             ])
             ->filters([

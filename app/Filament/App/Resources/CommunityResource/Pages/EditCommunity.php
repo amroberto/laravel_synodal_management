@@ -17,6 +17,16 @@ class EditCommunity extends EditRecord
         parent::mount($record);
     }
 
+    public function getContentTabLabel(): ?string
+    {
+        return 'Dados Gerais';
+    }
+
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
     protected function mutateFormDataBeforeSave(array $data): array
     {
         // Se a comunidade tiver um endereço existente, ele é atualizado

@@ -19,6 +19,7 @@ use Filament\Resources\Resource;
 use App\Filament\App\Resources\CommunityResource\Pages;
 use App\Filament\App\Resources\ComunityResource\RelationManagers\CommunityleadershipsRelationManager;
 use App\Filament\App\Resources\ComunityResource\RelationManagers\LeadershipsRelationManager as RelationManagersLeadershipsRelationManager;
+use Filament\Resources\Pages\ContentTabPosition;
 
 class CommunityResource extends Resource
 {
@@ -184,12 +185,12 @@ class CommunityResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('corporate_name')->label('Corporate Name'),
-                Tables\Columns\TextColumn::make('fantasy_name')->label('Fantasy Name'),
-                Tables\Columns\TextColumn::make('document')->label('Document'),
-                Tables\Columns\TextColumn::make('phone')->label('Phone'),
-                Tables\Columns\TextColumn::make('email')->label('Email'),
-                Tables\Columns\TextColumn::make('address.city.name')->label('City'),
+                Tables\Columns\TextColumn::make('corporate_name')->label('Corporate Name')->searchable(),
+                Tables\Columns\TextColumn::make('fantasy_name')->label('Fantasy Name')->searchable(),
+                Tables\Columns\TextColumn::make('document')->label('Document')->searchable(),
+                Tables\Columns\TextColumn::make('phone')->label('Phone')->searchable(),
+                Tables\Columns\TextColumn::make('email')->label('Email')->searchable(),
+                Tables\Columns\TextColumn::make('address.city.name')->label('City')->searchable(),
             ])
             ->filters([
                 // Filtros opcionais, caso necessário

@@ -16,6 +16,8 @@ class CommunityleadershipsRelationManager extends RelationManager
 {
     protected static string $relationship = 'Communityleaderships';
 
+    protected static ?string $title = 'Lideranças da Comunidade';
+
     public static function getModelLabel(): string
     {
         return __('Community Leaderships');
