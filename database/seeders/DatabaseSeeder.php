@@ -9,6 +9,7 @@ use Database\Seeders\CountrySeeder;
 use Database\Seeders\CityTableSeeder;
 use Database\Seeders\StateTableSeeder;
 use Database\Seeders\PositionTableSeeder;
+use Database\Seeders\RevenueCategorySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
             StateTableSeeder::class,
             CityTableSeeder::class,
             PositionTableSeeder::class,
+            RevenueCategorySeeder::class
         ]);
     }
 }
