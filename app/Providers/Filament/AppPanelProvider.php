@@ -5,6 +5,8 @@ namespace App\Providers\Filament;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
+use App\Http\Middleware\EnsureUser;
+use App\Http\Middleware\RedirectNotActiveUser;
 use Filament\PanelProvider;
 use Filament\Facades\Filament;
 use Filament\Navigation\MenuItem;
@@ -12,7 +14,6 @@ use Filament\Support\Colors\Color;
 use Filament\Tables\Columns\Column;
 use Filament\Forms\Components\Field;
 use Filament\Http\Middleware\Authenticate;
-use App\Filament\App\Resources\ParishResource;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -40,20 +41,15 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->login()
-            ->userMenuItems([
-                MenuItem::make()
-                ->label('Admin')
-                ->icon('heroicon-o-cog-6-tooth')
-                ->url('/admin')
-                ->visible(fn(): bool => auth()->user()->is_admin)
-            ])
+            ->registration()
+            ->profile()
             ->colors([
                 'danger' => color::Red,
                 'gray' => Color::Slate,
                 'info' => Color::Blue,
-                'success' => Color::Emerald,
+                'success' => Color::Amber,
                 'warning' => Color::Orange,
-                'primary' => Color::Amber,
+                'primary' => Color::Emerald,
             ])
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
@@ -69,6 +65,7 @@ class AppPanelProvider extends PanelProvider
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
+                RedirectNotActiveUser::class,
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,

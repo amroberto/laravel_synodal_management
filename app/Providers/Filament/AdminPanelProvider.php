@@ -2,9 +2,11 @@
 
 namespace App\Providers\Filament;
 
+use auth;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
+use App\Enums\UserTypeEnum;
 use Filament\PanelProvider;
 use Filament\Pages\Dashboard;
 use Filament\Facades\Filament;
@@ -17,11 +19,15 @@ use App\Http\Middleware\VerifyIsAdmin;
 use Filament\Widgets\FilamentInfoWidget;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\App\Resources\ParishResource;
+use App\Http\Middleware\EnsureAdmin;
+use App\Http\Middleware\EnsureUser;
+use App\Http\Middleware\RedirectNotActiveUser;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -45,13 +51,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->userMenuItems([
-                MenuItem::make()
-                ->label('App')
-                ->icon('heroicon-o-cog-6-tooth')
-                ->url('/app')
-                ->visible(fn(): bool => auth()->user()->is_admin)
-            ])
             ->colors([
                 'primary' => Color::Indigo,
                 'danger' => color::Red,
@@ -75,13 +74,14 @@ class AdminPanelProvider extends PanelProvider
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
+                EnsureAdmin::class,
+                RedirectNotActiveUser::class,
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                VerifyIsAdmin::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

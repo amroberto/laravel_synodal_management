@@ -4,9 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\UserTypeEnum;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 
 class User extends Authenticatable
 {
@@ -20,8 +23,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'is_admin',
+        'is_active',
         'password',
-        'type',
     ];
 
     /**
@@ -44,7 +48,10 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'type' => UserTypeEnum::class,
         ];
+    }
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->is_active;
     }
 }
