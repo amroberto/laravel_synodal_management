@@ -38,7 +38,7 @@ class LeadershipResource extends Resource
 {
     protected static ?string $model = Leadership::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-user-circle';
 
     public static function getNavigationGroup(): ?string
     {

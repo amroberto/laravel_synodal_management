@@ -25,7 +25,7 @@ class CommunityResource extends Resource
 {
     protected static ?string $model = Community::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-users';
 
     public static function getNavigationGroup(): ?string
     {
@@ -73,6 +73,11 @@ class CommunityResource extends Resource
 
                         Forms\Components\TextInput::make('phone')
                             ->label('Telefone')
+                            ->mask('(99) 9999-9999') // Aplica a máscara diretamente
+                            ->tel(),
+
+                        Forms\Components\TextInput::make('mobile')
+                            ->label('Celular')
                             ->mask('(99) 99999-9999') // Aplica a máscara diretamente
                             ->tel(),
 
@@ -177,7 +182,7 @@ class CommunityResource extends Resource
                             ->default(fn($record) => $record?->address?->neighborhood),
                     ])
                     ->columns(2)
-                    ->label('Address'),
+                    ->label('Endereço'),
             ]);
     }
 
@@ -188,6 +193,7 @@ class CommunityResource extends Resource
                 Tables\Columns\TextColumn::make('corporate_name')->label('Corporate Name')->searchable(),
                 Tables\Columns\TextColumn::make('fantasy_name')->label('Fantasy Name')->searchable(),
                 Tables\Columns\TextColumn::make('document')->label('Document')->searchable(),
+                Tables\Columns\TextColumn::make('mobile')->label('Mobile')->searchable(),
                 Tables\Columns\TextColumn::make('phone')->label('Phone')->searchable(),
                 Tables\Columns\TextColumn::make('email')->label('Email')->searchable(),
                 Tables\Columns\TextColumn::make('address.city.name')->label('City')->searchable(),

@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use auth;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
@@ -20,6 +19,7 @@ use Filament\Widgets\FilamentInfoWidget;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\App\Resources\ParishResource;
 use App\Http\Middleware\EnsureAdmin;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\EnsureUser;
 use App\Http\Middleware\RedirectNotActiveUser;
 use Illuminate\Session\Middleware\StartSession;
@@ -51,6 +51,13 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->userMenuItems([
+                MenuItem::make()
+                ->label('App')
+                ->icon('heroicon-o-cog-6-tooth')
+                ->url('/app')
+                ->visible(fn(): bool => Auth::user()->is_admin)
+            ])
             ->colors([
                 'primary' => Color::Indigo,
                 'danger' => color::Red,

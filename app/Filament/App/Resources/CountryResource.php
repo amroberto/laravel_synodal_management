@@ -22,7 +22,7 @@ class CountryResource extends Resource
         return __('menu.Registration');
     }
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-flag';
 
     public static function getModelLabel(): string
     {

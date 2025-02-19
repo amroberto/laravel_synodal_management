@@ -22,6 +22,7 @@ class Community extends Model
         'document',
         'unity_type',
         'phone',
+        'mobile',
         'email',
         'address_id',
     ];

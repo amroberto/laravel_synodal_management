@@ -14,6 +14,7 @@ use Filament\Support\Colors\Color;
 use Filament\Tables\Columns\Column;
 use Filament\Forms\Components\Field;
 use Filament\Http\Middleware\Authenticate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -41,7 +42,13 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->login()
-            ->registration()
+            ->userMenuItems([
+                MenuItem::make()
+                ->label('Admin')
+                ->icon('heroicon-o-cog-6-tooth')
+                ->url('/admin')
+                ->visible(fn(): bool => Auth::user()->is_admin)
+            ])
             ->profile()
             ->colors([
                 'danger' => color::Red,

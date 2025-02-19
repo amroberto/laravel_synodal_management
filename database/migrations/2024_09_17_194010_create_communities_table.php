@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('document');
             $table->enum('unity_type', UnityTypeEnum::values())->default(UnityTypeEnum::Community->value);
             $table->string('phone')->nullable();
+            $table->string('mobile')->nullable();
             $table->string('email')->nullable();
             $table->foreignId('address_id')->constrained()->onDelete('cascade');
             $table->timestamps();
