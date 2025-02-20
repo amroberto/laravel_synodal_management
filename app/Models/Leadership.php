@@ -28,6 +28,8 @@ class Leadership extends Model
         'address_id',
     ];
 
+    public $timestamps = true;
+
     /**
      * Get the attributes that should be cast.
      *
@@ -84,5 +86,10 @@ class Leadership extends Model
     public function community():BelongsTo
     {
         return $this->belongsTo(\App\Models\Community::class);
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, 'group_leadership');
     }
 }

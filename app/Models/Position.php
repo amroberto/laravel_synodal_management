@@ -13,6 +13,8 @@ class Position extends Model
 
     protected $fillable = ['name'];
 
+    public $timestamps = true;
+    
     /**
      * [Description for leaderships]
      *

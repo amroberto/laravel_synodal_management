@@ -15,6 +15,7 @@ class CommunityLeadership extends Model
         'position_id',
         'community_id'
     ];
+    
     /**
      * [Description for leadership]
      *

@@ -8,21 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Beneficiary extends Model
 {
     protected $fillable = [
-        'corporate_name',
-        'fantasy_name',
-        'document',
-        'phone',
-        'mobile',
-        'site',
-        'email',
-        'address_id',
+        'name',
     ];
+
+    public $timestamps = true;
     
-    /**
-     * @return BelongsTo
-     */
-    public function address(): BelongsTo
-    {
-        return $this->belongsTo(Address::class);
-    } 
 }

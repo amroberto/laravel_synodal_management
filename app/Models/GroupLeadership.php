@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RevenueCategory extends Model
+class GroupLeadership extends Model
 {
-    protected $fillable = [
-        'name',
-    ];
+    protected $table = 'group_leadership';
 
     public $timestamps = true;
+    
 }

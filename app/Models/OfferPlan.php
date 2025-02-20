@@ -18,6 +18,8 @@ class OfferPlan extends Model
         'year'
     ];
 
+    public $timestamps = true;
+
     protected $casts = [
         'offer_type' => OfferTypeEnum::class,
     ];

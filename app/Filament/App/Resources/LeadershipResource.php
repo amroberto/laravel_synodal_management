@@ -2,13 +2,14 @@
 
 namespace App\Filament\App\Resources;
 
-use Filament\Forms\Set;
 use Filament\Forms;
 use App\Models\City;
 use Filament\Tables;
+use App\Models\Group;
 use App\Models\State;
 use App\Models\Address;
 use App\Models\Country;
+use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Models\Community;
 use App\Models\Leadership;
@@ -100,6 +101,13 @@ class LeadershipResource extends Resource
                         Forms\Components\TextInput::make('email')
                             ->label('E-mail')
                             ->email(),
+
+                        Forms\Components\Select::make('groups')
+                            ->multiple()
+                            ->label('Groups')
+                            ->relationship('groups', 'name')
+                            ->preload()
+                            ->options(Group::all()->pluck('name', 'id')),
 
                         Forms\Components\FileUpload::make('photo')
                             ->label('Foto')

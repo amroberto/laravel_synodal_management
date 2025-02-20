@@ -27,6 +27,8 @@ class Community extends Model
         'address_id',
     ];
 
+    public $timestamps = true;
+
     protected $casts = [
         'unity_type' => UnityTypeEnum::class,
     ];
