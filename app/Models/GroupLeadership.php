@@ -7,7 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class GroupLeadership extends Model
 {
     protected $table = 'group_leadership';
-
-    public $timestamps = true;
     
 }

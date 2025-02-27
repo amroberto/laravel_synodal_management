@@ -2,39 +2,32 @@
 
 namespace App\Filament\App\Resources;
 
+use App\Filament\App\Resources\GroupResource\Pages;
+use App\Filament\App\Resources\GroupResource\RelationManagers;
+use App\Models\Group;
 use Filament\Forms;
-use Filament\Tables;
-use App\Models\Position;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Actions\EditAction;
 use Filament\Resources\Resource;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
+use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\App\PositionResource\RelationManagers;
-use App\Filament\App\Resources\PositionResource\Pages\EditPosition;
-use App\Filament\App\Resources\PositionResource\Pages\ListPositions;
-use App\Filament\App\Resources\PositionResource\Pages\CreatePosition;
 
-class PositionResource extends Resource
+class GroupResource extends Resource
 {
-    protected static ?string $model = Position::class;
+    protected static ?string $model = Group::class;
 
-    protected static ?string $navigationIcon = 'heroicon-m-square-3-stack-3d';
-    
     public static function getNavigationGroup(): ?string
     {
         return __('menu.Registration');
     }
 
-    public static function getModelLabel(): string
+        public static function getModelLabel(): string
     {
-        return __('Position');
+        return __('Groups');
     }
+
+    protected static ?string $navigationIcon = 'heroicon-s-users';
 
     public static function form(Form $form): Form
     {
@@ -54,14 +47,6 @@ class PositionResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -86,9 +71,9 @@ class PositionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListPositions::route('/'),
-            'create' => CreatePosition::route('/create'),
-            'edit' => EditPosition::route('/{record}/edit'),
+            'index' => Pages\ListGroups::route('/'),
+            'create' => Pages\CreateGroup::route('/create'),
+            'edit' => Pages\EditGroup::route('/{record}/edit'),
         ];
     }
 }

@@ -6,32 +6,16 @@ use Illuminate\Support\Facades\Http;
 
 class CnpjService
 {
-    /**
-     * Fetch data from the CNPJ API.
-     *
-     * @param string $cnpj
-     * @return array|null
-     */
-    public function fetchCnpjData(string $cnpj): ?array
+    public function consultarCnpj($cnpj)
     {
-        $cnpj = preg_replace('/\D/', '', $cnpj); // Remove any non-numeric characters
+        $cnpj = preg_replace('/\D/', '', $cnpj); // Remove caracteres não numéricos
 
-        if (strlen($cnpj) !== 14) {
-            return null; // Invalid CNPJ length
+        $response = Http::get("https://www.receitaws.com.br/v1/cnpj/{$cnpj}");
+
+        if ($response->successful()) {
+            return $response->json();
         }
 
-        try {
-            // Replace the URL with your actual CNPJ API endpoint
-            $response = Http::get("https://api.example.com/cnpj/{$cnpj}");
-
-            if ($response->successful()) {
-                return $response->json();
-            }
-
-            return null;
-        } catch (\Exception $e) {
-            // Log the exception if needed
-            return null;
-        }
+        return null; // 
     }
 }

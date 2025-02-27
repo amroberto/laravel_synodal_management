@@ -90,6 +90,6 @@ class Leadership extends Model
 
     public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(Group::class, 'group_leadership');
+        return $this->belongsToMany(Group::class, 'group_leadership')->withTimestamps();
     }
 }

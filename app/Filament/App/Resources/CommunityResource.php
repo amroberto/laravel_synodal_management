@@ -8,6 +8,7 @@ use Filament\Tables;
 use App\Models\State;
 use App\Models\Address;
 use App\Models\Country;
+use Filament\Forms\Set;
 use App\Models\Position;
 use Filament\Forms\Form;
 use App\Models\Community;
@@ -16,10 +17,11 @@ use Filament\Tables\Table;
 use App\Enums\UnityTypeEnum;
 use App\Services\ViaCepService;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Http;
+use Filament\Resources\Pages\ContentTabPosition;
 use App\Filament\App\Resources\CommunityResource\Pages;
 use App\Filament\App\Resources\ComunityResource\RelationManagers\CommunityleadershipsRelationManager;
 use App\Filament\App\Resources\ComunityResource\RelationManagers\LeadershipsRelationManager as RelationManagersLeadershipsRelationManager;
-use Filament\Resources\Pages\ContentTabPosition;
 
 class CommunityResource extends Resource
 {
@@ -43,23 +45,53 @@ class CommunityResource extends Resource
             ->schema([
                 Forms\Components\Fieldset::make('Informações da Comunidade')
                     ->schema([
-                        Forms\Components\TextInput::make('corporate_name')
+                        Forms\Components\TextInput::make('document') // Aqui está o CNPJ
+                                ->label('CNPJ')
+                                ->mask('99.999.999/9999-99')
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set) {
+                                    if (strlen($state) === 18) { // Valida se o CNPJ está completo
+                                        $dadosCnpj = app(\App\Services\CnpjService::class)->consultarCnpj($state);
+                                        
+                                        if ($dadosCnpj) {
+                                            $set('corporate_name', $dadosCnpj['nome'] ?? '');
+                                            $set('fantasy_name', $dadosCnpj['fantasia'] ?? '');
+                                            $set('phone', $dadosCnpj['telefone'] ?? '');
+                                            $set('email', $dadosCnpj['email'] ?? '');
+                                            
+                                            $cepFormated = preg_replace('/\D/', '', $dadosCnpj['cep']);
+                                            $cepService = app(ViaCepService::class);
+                                            $dadosCep = $cepService->consultarCep($cepFormated);
+
+                                            $set('address.postal_code', $dadosCnpj['cep'] ?? '');
+                                            $set('address.address_number', $dadosCnpj['numero'] ?? '');
+
+                                            if ($dadosCep) {
+                                                $set('address.street', $dadosCep['logradouro'] ?? null);
+                                                $set('address.neighborhood', $dadosCep['bairro'] ?? null);
+
+                                                $city = City::where('name', $dadosCep['localidade'])
+                                                    ->whereHas('state', function ($query) use ($dadosCep) {
+                                                        $query->where('abbreviation', $dadosCep['uf']);
+                                                    })
+                                                    ->first();
+
+                                                if ($city) {
+                                                    $set('address.city_id', $city->id);
+                                                    $set('address.state_id', $city->state->id);
+                                                    $set('address.country_id', $city->state->country->id);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }),
+                        
+                        Forms\Components\TextInput::make('corporate_name')      
                             ->required()
                             ->label('Razão Social'),
 
                         Forms\Components\TextInput::make('fantasy_name')
                             ->label('Nome Fantasia'),
-
-                        Forms\Components\TextInput::make('document')
-                            ->label('CNPJ')
-                            ->required()
-                            ->mask('99.999.999/9999-99')
-                            ->rule('cnpj')
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                // Remove todos os caracteres não numéricos
-                                $numericCNPJ = preg_replace('/\D/', '', $state);
-                                $set('cnpj', $numericCNPJ);
-                            }),
 
                         Forms\Components\Select::make('unity_type')
                             ->options([
@@ -97,9 +129,10 @@ class CommunityResource extends Resource
                             ->default(fn($record) => $record?->address?->postal_code)
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
-                                if (!empty($state)) {
+                                if ($state) {
                                     $viaCepService = app(ViaCepService::class);
-                                    $data = $viaCepService->consultarCep($state);
+                                    $cep = preg_replace('/\D/', '', $state);
+                                    $data = $viaCepService->consultarCep($cep);
 
                                     if ($data) {
                                         $set('address.street', $data['logradouro'] ?? null);
@@ -212,7 +245,6 @@ class CommunityResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //RelationManagersLeadershipsRelationManager::class,
             CommunityleadershipsRelationManager::class,
         ];
     }
