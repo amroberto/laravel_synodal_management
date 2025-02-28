@@ -31,7 +31,7 @@ class CommunityResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('menu.Registration');
+        return __('menu.Communities');
     }
 
     public static function getModelLabel(): string

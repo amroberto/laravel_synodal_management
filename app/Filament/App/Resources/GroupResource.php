@@ -19,7 +19,7 @@ class GroupResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('menu.Registration');
+        return __('menu.Leaderships');
     }
 
         public static function getModelLabel(): string

@@ -21,7 +21,7 @@ class RevenueCategoryResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('menu.Registration');
+        return __('menu.Revenues');
     }
 
     public static function getModelLabel(): string

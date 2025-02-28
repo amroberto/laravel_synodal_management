@@ -27,7 +27,7 @@ class StateResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('menu.Registration');
+        return __('menu.Communities');
     }
 
     protected static ?string $navigationIcon = 'heroicon-o-map';

@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('offer_plans', function (Blueprint $table) {
             $table->id();
-            $table->date('offer_date');
+            $table->date('offer_date')->unique();
             $table->string('liturgical_date');
             $table->foreignId('beneficiary_id')->index()->constrained()->cascadeOnDelete();
             $table->enum('offer_type', OfferTypeEnum::values());

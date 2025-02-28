@@ -26,7 +26,7 @@ class CityResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('menu.Registration');
+        return __('menu.Communities');
     }
     
     public static function getModelLabel(): string
@@ -44,7 +44,8 @@ class CityResource extends Resource
                 Forms\Components\TextInput::make('ibge_code')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('state_id')
+                Forms\Components\Select::make('state_id')
+                    ->relationship('state', 'name')
                     ->required()
                     ->numeric(),
             ]);
