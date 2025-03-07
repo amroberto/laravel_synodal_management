@@ -14,6 +14,14 @@ return new class extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
+            $table->date('dt_offer');
+            $table->foreignId('offer_plan_id')->constrained()->onDelete('cascade');
+            $table->decimal('value', 10, 2);
+            $table->string('month', 2);
+            $table->string('year', 4);
+            $table->foreignId('revenue_id')->constrained()->onDelete('cascade');
+            $table->foreignId('community_id')->constrained()->onDelete('cascade');
+            $table->text('observation')->nullable();
             $table->timestamps();
         });
     }
