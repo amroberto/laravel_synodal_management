@@ -75,6 +75,7 @@ class OfferPlanResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('offer_date', 'asc')
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->searchable(),
@@ -84,6 +85,7 @@ class OfferPlanResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('liturgical_date')
+                    ->label('Liturgical Date')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('beneficiary.name')
                     ->searchable(),

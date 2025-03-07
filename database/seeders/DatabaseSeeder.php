@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             PositionTableSeeder::class,
             RevenueCategorySeeder::class,
             GroupSeeder::class,
+            RevenueSubCategorySeed::class,
         ]);
     }
 }

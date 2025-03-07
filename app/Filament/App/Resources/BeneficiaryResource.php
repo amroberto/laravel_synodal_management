@@ -2,16 +2,17 @@
 
 namespace App\Filament\App\Resources;
 
-use App\Filament\App\Resources\BeneficiaryResource\Pages;
-use App\Filament\App\Resources\BeneficiaryResource\RelationManagers;
-use App\Models\Beneficiary;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
+use Tables\Columns\Text;
 use Filament\Tables\Table;
+use App\Models\Beneficiary;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\App\Resources\BeneficiaryResource\Pages;
+use App\Filament\App\Resources\BeneficiaryResource\RelationManagers;
 
 class BeneficiaryResource extends Resource
 {
@@ -43,7 +44,8 @@ class BeneficiaryResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('name')->label('Name')->searchable(),
             ])
             ->filters([
                 //
