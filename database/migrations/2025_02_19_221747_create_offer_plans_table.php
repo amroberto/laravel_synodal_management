@@ -16,10 +16,10 @@ return new class extends Migration
             $table->id();
             $table->date('offer_date')->unique();
             $table->string('liturgical_date');
-            $table->foreignId('beneficiary_id')->index()->constrained()->cascadeOnDelete();
+            $table->string('destination');
             $table->enum('offer_type', OfferTypeEnum::values());
-            $table->string('month', 2);
-            $table->string('year', 4);
+            $table->unsignedTinyInteger('month');
+            $table->unsignedSmallInteger('year');
             $table->timestamps();
         });
     }

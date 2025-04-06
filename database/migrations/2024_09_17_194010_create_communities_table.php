@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('corporate_name');
             $table->string('fantasy_name');
-            $table->string('document');
+            $table->string('document')->nullable();
             $table->enum('unity_type', UnityTypeEnum::values())->default(UnityTypeEnum::Community->value);
             $table->string('phone')->nullable();
             $table->string('mobile')->nullable();

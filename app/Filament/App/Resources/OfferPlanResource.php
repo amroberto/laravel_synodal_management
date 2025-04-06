@@ -12,6 +12,7 @@ use App\Enums\OfferTypeEnum;
 use Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Forms\FormsComponent;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\App\Resources\OfferPlanResource\Pages;
@@ -23,7 +24,7 @@ class OfferPlanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-        public static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): ?string
     {
         return __('menu.Offers');
     }
@@ -40,23 +41,22 @@ class OfferPlanResource extends Resource
                 forms\Components\DatePicker::make('offer_date')
                     ->label('Offer Date')
                     ->required()
-                    ->afterStateUpdated(function($state, callable $set) {
-                        if($state) {
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        if ($state) {
                             $date = Carbon::parse($state);
-                            $set('month', $date->format('m')); 
+                            $set('month', $date->format('m'));
                             $set('year', $date->format('Y'));
                         }
                     }),
-                
+
                 forms\Components\TextInput::make('liturgical_date')
                     ->label('Liturgical Date')
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\Select::make('beneficiary_id')
-                    ->relationship('beneficiary', 'name')
+                Forms\Components\TextInput::make('destination')
                     ->required(),
-                
+
                 Forms\Components\Select::make('offer_type')
                     ->label('Offer Type')
                     ->options([
@@ -77,26 +77,51 @@ class OfferPlanResource extends Resource
         return $table
             ->defaultSort('offer_date', 'asc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('mes_abreviado')
+                    ->label('Month')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('offer_date')
-                    ->label('Offer Date')
-                    ->date('d/m/Y')
+                    ->label('Day')
+                    ->date('d')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('liturgical_date')
                     ->label('Liturgical Date')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('beneficiary.name')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('offer_type')
-                    ->label('Offer Type')
-                    ->formatStateUsing(fn ($state) => $state ? $state->value : '')
-                    ->sortable()
+                    ->label('Instance')
+                    ->searchable()
+                    ->badge(),
+                Tables\Columns\TextColumn::make('destination')
+                    ->label('Destination')
                     ->searchable(),
+
             ])
             ->filters([
-                //
+                SelectFilter::make('month')
+                    ->label('Filtrar por Mês')
+                    ->options([
+                        1 => 'JAN',
+                        2 => 'FEV',
+                        3 => 'MAR',
+                        4 => 'ABR',
+                        5 => 'MAI',
+                        6 => 'JUN',
+                        7 => 'JUL',
+                        8 => 'AGO',
+                        9 => 'SET',
+                        10 => 'OUT',
+                        11 => 'NOV',
+                        12 => 'DEZ',
+                    ]),
+                SelectFilter::make('offer_type')
+                    ->label('Tipo de Instância')
+                    ->options([
+                        OfferTypeEnum::LOCAL->value => 'Local',
+                        OfferTypeEnum::SINODAL->value => 'Sínodal',
+                        OfferTypeEnum::NACIONAL->value => 'Nacional',
+                        OfferTypeEnum::ESPECIAL->value => 'Especial',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

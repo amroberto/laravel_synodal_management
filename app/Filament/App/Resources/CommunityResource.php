@@ -46,52 +46,51 @@ class CommunityResource extends Resource
                 Forms\Components\Fieldset::make('Informações da Comunidade')
                     ->schema([
                         Forms\Components\TextInput::make('document') // Aqui está o CNPJ
-                                ->label('CNPJ')
-                                ->mask('99.999.999/9999-99')
-                                ->live()
-                                ->afterStateUpdated(function ($state, callable $set) {
-                                    if (strlen($state) === 18) { // Valida se o CNPJ está completo
-                                        $dadosCnpj = app(\App\Services\CnpjService::class)->consultarCnpj($state);
-                                        
-                                        if ($dadosCnpj) {
-                                            $set('corporate_name', $dadosCnpj['nome'] ?? '');
-                                            $set('fantasy_name', $dadosCnpj['fantasia'] ?? '');
-                                            $set('phone', $dadosCnpj['telefone'] ?? '');
-                                            $set('email', $dadosCnpj['email'] ?? '');
-                                            
-                                            $cepFormated = preg_replace('/\D/', '', $dadosCnpj['cep']);
-                                            $cepService = app(ViaCepService::class);
-                                            $dadosCep = $cepService->consultarCep($cepFormated);
+                            ->label('CNPJ')
+                            ->mask('99.999.999/9999-99')
+                            ->live()
+                            ->columnSpan(2)
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                if (strlen($state) === 18) { // Valida se o CNPJ está completo
+                                    $dadosCnpj = app(\App\Services\CnpjService::class)->consultarCnpj($state);
 
-                                            $set('address.postal_code', $dadosCnpj['cep'] ?? '');
-                                            $set('address.address_number', $dadosCnpj['numero'] ?? '');
+                                    if ($dadosCnpj) {
+                                        $set('corporate_name', $dadosCnpj['nome'] ?? '');
+                                        $set('fantasy_name', $dadosCnpj['fantasia'] ?? '');
+                                        $set('phone', $dadosCnpj['telefone'] ?? '');
+                                        $set('email', $dadosCnpj['email'] ?? '');
 
-                                            if ($dadosCep) {
-                                                $set('address.street', $dadosCep['logradouro'] ?? null);
-                                                $set('address.neighborhood', $dadosCep['bairro'] ?? null);
+                                        $cepFormated = preg_replace('/\D/', '', $dadosCnpj['cep']);
+                                        $cepService = app(ViaCepService::class);
+                                        $dadosCep = $cepService->consultarCep($cepFormated);
 
-                                                $city = City::where('name', $dadosCep['localidade'])
-                                                    ->whereHas('state', function ($query) use ($dadosCep) {
-                                                        $query->where('abbreviation', $dadosCep['uf']);
-                                                    })
-                                                    ->first();
+                                        $set('address.postal_code', $dadosCnpj['cep'] ?? '');
+                                        $set('address.address_number', $dadosCnpj['numero'] ?? '');
 
-                                                if ($city) {
-                                                    $set('address.city_id', $city->id);
-                                                    $set('address.state_id', $city->state->id);
-                                                    $set('address.country_id', $city->state->country->id);
-                                                }
+                                        if ($dadosCep) {
+                                            $set('address.street', $dadosCep['logradouro'] ?? null);
+                                            $set('address.neighborhood', $dadosCep['bairro'] ?? null);
+
+                                            $city = City::where('name', $dadosCep['localidade'])
+                                                ->whereHas('state', function ($query) use ($dadosCep) {
+                                                    $query->where('abbreviation', $dadosCep['uf']);
+                                                })
+                                                ->first();
+
+                                            if ($city) {
+                                                $set('address.city_id', $city->id);
+                                                $set('address.state_id', $city->state->id);
+                                                $set('address.country_id', $city->state->country->id);
                                             }
                                         }
                                     }
-                                }),
-                        
-                        Forms\Components\TextInput::make('corporate_name')      
-                            ->required()
-                            ->label('Razão Social'),
+                                }
+                            }),
 
-                        Forms\Components\TextInput::make('fantasy_name')
-                            ->label('Nome Fantasia'),
+                        Forms\Components\TextInput::make('corporate_name')
+                            ->required()
+                            ->columnSpan(4)
+                            ->label('Razão Social'),
 
                         Forms\Components\Select::make('unity_type')
                             ->options([
@@ -101,24 +100,34 @@ class CommunityResource extends Resource
                             ])
                             ->default(UnityTypeEnum::Community->value)
                             ->required()
+                            ->columnSpan(2)
                             ->label('Tipo de Unidade'),
+
+                        Forms\Components\TextInput::make('fantasy_name')
+                            ->label('Nome Fantasia')
+                            ->columnSpan(4),
+
+
 
                         Forms\Components\TextInput::make('phone')
                             ->label('Telefone')
                             ->mask('(99) 9999-9999') // Aplica a máscara diretamente
+                            ->columnSpan(2)
                             ->tel(),
 
                         Forms\Components\TextInput::make('mobile')
                             ->label('Celular')
                             ->mask('(99) 99999-9999') // Aplica a máscara diretamente
+                            ->columnSpan(2)
                             ->tel(),
 
                         Forms\Components\TextInput::make('email')
+                            ->columnSpan(2)
                             ->label('E-mail'),
 
                         Forms\Components\Hidden::make('address_id')
                     ])
-                    ->columns(2)
+                    ->columns(6)
                     ->label('Informações da Comunidade'),
 
                 Forms\Components\Fieldset::make('Informações de Endereço')
@@ -128,6 +137,7 @@ class CommunityResource extends Resource
                             ->mask('99999-999')
                             ->default(fn($record) => $record?->address?->postal_code)
                             ->reactive()
+                            ->columnSpan(1)
                             ->afterStateUpdated(function ($state, callable $set) {
                                 if ($state) {
                                     $viaCepService = app(ViaCepService::class);
@@ -153,11 +163,24 @@ class CommunityResource extends Resource
                                 }
                             }),
 
+                        Forms\Components\TextInput::make('address.street')
+                            ->required()
+                            ->columnSpan(4)
+                            ->label('Street')
+                            ->default(fn($record) => $record?->address?->street),
+
+                        Forms\Components\TextInput::make('address.address_number')
+                            ->required()
+                            ->columnSpan(1)
+                            ->label('Number')
+                            ->default(fn($record) => $record?->address?->address_number),
+
                         Forms\Components\Select::make('address.country_id')
                             ->label('País')
                             ->default(fn($record) => $record?->address?->city?->state?->country?->id)
                             ->options(Country::all()->pluck('name', 'id')->toArray())
                             ->reactive()
+                            ->columnSpan(2)
                             ->afterStateUpdated(function ($state, callable $set) {
                                 $set('address.state_id', null);
                                 $set('address.city_id', null);
@@ -167,6 +190,7 @@ class CommunityResource extends Resource
 
                         Forms\Components\Select::make('address.state_id')
                             ->label('Estado')
+                            ->columnSpan(2)
                             ->default(fn($record) => $record?->address?->city?->state?->id)
                             ->options(function (callable $get) {
                                 $country = $get('address.country_id');
@@ -185,7 +209,8 @@ class CommunityResource extends Resource
 
                         Forms\Components\Select::make('address.city_id')
                             ->label('City')
-                            ->default(fn($record) => $record?->address?->city?->id) 
+                            ->columnSpan(2)
+                            ->default(fn($record) => $record?->address?->city?->id)
                             ->options(function (callable $get) {
                                 $state = $get('address.state_id');
                                 if ($state) {
@@ -196,25 +221,18 @@ class CommunityResource extends Resource
                             ->searchable()
                             ->required(),
 
-                        Forms\Components\TextInput::make('address.street')
-                            ->required()
-                            ->label('Street')
-                            ->default(fn($record) => $record?->address?->street),
-
-                        Forms\Components\TextInput::make('address.address_number')
-                            ->required()
-                            ->label('Number')
-                            ->default(fn($record) => $record?->address?->address_number),
 
                         Forms\Components\TextInput::make('address.complement')
                             ->label('Complement')
+                            ->columnSpan(2)
                             ->default(fn($record) => $record?->address?->complement),
 
                         Forms\Components\TextInput::make('address.neighborhood')
                             ->label('Neighborhood')
+                            ->columnSpan(2)
                             ->default(fn($record) => $record?->address?->neighborhood),
                     ])
-                    ->columns(2)
+                    ->columns(6)
                     ->label('Endereço'),
             ]);
     }
@@ -223,12 +241,11 @@ class CommunityResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('corporate_name')->label('Corporate Name')->searchable(),
-                Tables\Columns\TextColumn::make('fantasy_name')->label('Fantasy Name')->searchable(),
-                Tables\Columns\TextColumn::make('document')->label('Document')->searchable(),
+                Tables\Columns\TextColumn::make('fantasy_name')->label('Name')->searchable(),
                 Tables\Columns\TextColumn::make('mobile')->label('Mobile')->searchable(),
                 Tables\Columns\TextColumn::make('phone')->label('Phone')->searchable(),
                 Tables\Columns\TextColumn::make('email')->label('Email')->searchable(),
+                Tables\Columns\TextColumn::make('unity_type')->label('Type')->searchable(),
                 Tables\Columns\TextColumn::make('address.city.name')->label('City')->searchable(),
             ])
             ->filters([

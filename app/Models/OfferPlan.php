@@ -12,7 +12,7 @@ class OfferPlan extends Model
     protected $fillable = [
         'offer_date',
         'liturgical_date',
-        'beneficiary_id',
+        'destination',
         'offer_type',
         'month',
         'year'
@@ -25,13 +25,6 @@ class OfferPlan extends Model
     ];
 
 
-    /**
-     * @return BelongsTo
-     */
-    public function beneficiary(): BelongsTo
-    {
-        return $this->belongsTo(Beneficiary::class);
-    }
 
     public function getMonthNameAttribute(): string
     {
@@ -51,5 +44,25 @@ class OfferPlan extends Model
         ];
 
         return $months[$this->month] ?? 'Mês inválido';
+    }
+
+    public function getMesAbreviadoAttribute(): string
+    {
+        $months = [
+            1 => 'JAN',
+            2 => 'FEV',
+            3 => 'MAR',
+            4 => 'ABR',
+            5 => 'MAI',
+            6 => 'JUN',
+            7 => 'JUL',
+            8 => 'AGO',
+            9 => 'SET',
+            10 => 'OUT',
+            11 => 'NOV',
+            12 => 'DEZ',
+        ];
+
+        return $months[(int) $this->month] ?? '-';
     }
 }
