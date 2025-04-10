@@ -16,12 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('community_id')->constrained()->onDelete('cascade');
             $table->date('dt_revenue');
-            $table->string('reference_month', 2);
-            $table->string('reference_year', 4);
-            $table->decimal('total_revenue', 10, 2);
-            $table->decimal('tithe', 10, 2);
+            $table->unsignedTinyInteger('reference_month');
+            $table->unsignedSmallInteger('reference_year');
+            $table->decimal('total_revenue', 10, 2)->default(0);
+            $table->decimal('tithe', 10, 2)->default(0);
             $table->decimal('other', 10, 2)->nullable();
-            $table->decimal('total_offers', 10, 2)->nullable();
+            $table->decimal('total_offers', 10, 2)->default(0);
             $table->string('month', 2);
             $table->string('year', 4);
             $table->text('observation')->nullable();

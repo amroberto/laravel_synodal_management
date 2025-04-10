@@ -11,4 +11,14 @@ class RevenueCategory extends Model
     ];
 
     public $timestamps = true;
+
+    public function revenues()
+    {
+        return $this->hasMany(Revenue::class);
+    }
+    
+    public function subCategories()
+{
+    return $this->hasMany(RevenueSubCategory::class);
+}
 }

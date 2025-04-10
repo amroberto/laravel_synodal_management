@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\CityResource\Pages;
+declare(strict_types=1);
+
+namespace App\Filament\App\Resources\CityResource\Pages;
 
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;

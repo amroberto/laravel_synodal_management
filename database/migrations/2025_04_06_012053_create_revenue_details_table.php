@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('revenue_itens', function (Blueprint $table) {
+        Schema::create('revenue_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('revenue_id')->constrained()->onDelete('cascade');
             $table->foreignId('revenue_sub_category_id')->constrained()->onDelete('cascade');
-            $table->decimal('value', 10, 2);
+            $table->decimal('amount', 10, 2);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('revenue_itens');
+        Schema::dropIfExists('revenue_details');
     }
 };

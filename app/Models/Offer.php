@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Offer extends Model
 {
+
+
     protected $fillable = [
         'dt_offer',
         'offer_plan_id',
@@ -14,7 +16,6 @@ class Offer extends Model
         'month',
         'year',
         'revenue_id',
-        'community_id',
         'observation',
     ];
 
@@ -22,7 +23,7 @@ class Offer extends Model
      * [Description for offerPlan]
      *
      * @return BelongsTo
-     * 
+     *
      */
     public function offerPlan(): BelongsTo
     {
@@ -33,22 +34,16 @@ class Offer extends Model
      * [Description for revenue]
      *
      * @return BelongsTo
-     * 
+     *
      */
     public function revenue(): BelongsTo
     {
         return $this->belongsTo(Revenue::class);
     }
 
-    /**
-     * [Description for community]
-     *
-     * @return BelongsTo
-     * 
-     */
-    public function community(): BelongsTo
+    public function community()
     {
-        return $this->belongsTo(Community::class);
+        return $this->revenue?->community();
     }
 
 }

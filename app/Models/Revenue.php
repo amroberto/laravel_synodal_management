@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Community;
-use App\Models\RevenueItens;
+use App\Models\RevenueDetail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,11 +27,12 @@ class Revenue extends Model
         'observation'
     ];
 
+
     /**
      * [Description for user]
      *
      * @return BelongsTo
-     * 
+     *
      */
     public function user(): BelongsTo
     {
@@ -42,7 +43,7 @@ class Revenue extends Model
      * [Description for community]
      *
      * @return BelongsTo
-     * 
+     *
      */
     public function community(): BelongsTo
     {
@@ -53,10 +54,34 @@ class Revenue extends Model
      * [Description for revenueItens]
      *
      * @return HasMany
-     * 
+     *
      */
-    public function revenueItens(): HasMany
+    public function details(): HasMany
     {
-        return $this->hasMany(RevenueItens::class);
+        return $this->hasMany(RevenueDetail::class);
     }
+
+    /**
+     * [Description for offer]
+     *
+     * @return HasMany
+     *
+     */
+    public function offers():HasMany
+    {
+        return $this->hasMany(Offer::class);
+    }
+
+    /**
+     * [Description for offerPlan]
+     *
+     * @return HasMany
+     *
+     */
+    public function offerPlan():HasMany
+    {
+        return $this->hasMany(OfferPlan::class);
+    }
+
+
 }

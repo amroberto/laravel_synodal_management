@@ -40,7 +40,7 @@ class RevenueSubCategoryResource extends Resource
 
                 Forms\Components\Select::make('revenue_category_id')
                     ->label('Categoria de Receita')
-                    ->relationship('revenue_category', 'name')
+                    ->relationship('revenueCategory', 'name')
                     ->required()
                     ->searchable()
                     ->preload()
@@ -54,7 +54,7 @@ class RevenueSubCategoryResource extends Resource
             ->defaultSort('revenue_category_id')
             ->columns([
                 \Filament\Tables\Columns\TextColumn::make('id')->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('revenue_category.name')->label('Categoria')->sortable()->searchable(),
+                \Filament\Tables\Columns\TextColumn::make('category.name')->label('Categoria')->sortable()->searchable(),
                 \Filament\Tables\Columns\TextColumn::make('name')->label('Nome')->sortable()->searchable(),
                 
 

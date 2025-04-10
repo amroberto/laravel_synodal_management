@@ -16,10 +16,9 @@ return new class extends Migration
             $table->date('dt_offer');
             $table->foreignId('offer_plan_id')->constrained()->cascadeOnDelete();
             $table->decimal('value', 10, 2);
-            $table->string('month', 2);
-            $table->string('year', 4);
+            $table->unsignedTinyInteger('month');
+            $table->unsignedSmallInteger('year');
             $table->foreignId('revenue_id')->constrained()->onDelete('cascade');
-            $table->foreignId('community_id')->constrained()->onDelete('cascade');
             $table->text('observation')->nullable();
             $table->timestamps();
         });

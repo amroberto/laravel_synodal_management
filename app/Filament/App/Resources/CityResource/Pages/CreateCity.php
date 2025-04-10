@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Filament\Resources\CityResource\Pages;
-
+namespace App\Filament\App\Resources\CityResource\Pages;
+use App\Models\City;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\App\Resources\CityResource;
