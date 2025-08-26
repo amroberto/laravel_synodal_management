@@ -19,7 +19,7 @@ class RevenueSubCategorySeed extends Seeder
             [3, 'Oferta Local', 2],
             [4, 'Doações por Ofício', 3],
             [5, 'Doações expontâneas', 3],
-            [6, 'Alm oços, jantares', 4],
+            [6, 'Almoços, jantares', 4],
             [7, 'Festas', 4],
             [8, 'Rifas', 4],
             [9, 'Alugueis', 5],

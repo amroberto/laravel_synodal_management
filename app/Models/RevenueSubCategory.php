@@ -17,21 +17,21 @@ class RevenueSubCategory extends Model
 
     public $timestamps = true;
 
-
     /**
-     * [Description for revenueCategory]
+     * [Description for category]
      *
-     * @return [type]
+     * @return BelongsTo
      * 
      */
     public function category():BelongsTo
     {
         return $this->belongsTo(RevenueCategory::class, 'revenue_category_id');
     }
+
     /**
      * [Description for revenueDetails]
      *
-     * @return [type]
+     * @return HasMany
      * 
      */
     public function revenueDetails():HasMany

@@ -52,4 +52,15 @@ class Community extends Model
     {
         return $this->hasMany(CommunityLeadership::class);
     }
+
+    /**
+     * [Description for revenues]
+     *
+     * @return [type]
+     * 
+     */
+    public function revenues()
+{
+    return $this->hasMany(Revenue::class);  // Exemplo de um relacionamento One-to-Many
+}
 }

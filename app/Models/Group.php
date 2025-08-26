@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Group extends Model
 {
-    protected $fillable = ['name', 'description'];
+    protected $fillable = [
+        'name',
+        'description'
+    ];
 
     public $timestamps = true;
 
@@ -16,7 +19,7 @@ class Group extends Model
      * [Description for leadership]
      *
      * @return BelongsToMany
-     * 
+     *
      */
     public function leadership(): BelongsToMany
     {

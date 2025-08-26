@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Registro do ViaCepService
-        $this->app->bind(ViaCepService::class, function ($app) {
+        $this->app->bind(ViaCepService::class, function () {
             return new ViaCepService();
         });
     }
