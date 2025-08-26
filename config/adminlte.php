@@ -306,36 +306,36 @@ return [
     |--------------------------------------------------------------------------
     */
     'menu' => [
-        // Dashboard for administrators
+        // Dashboard para administradores
         [
             'text' => 'Dashboard',
             'url'  => 'admin/dashboard',
             'icon' => 'fas fa-tachometer-alt',
             'can'  => 'access-admin',
         ],
-        // Dashboard for normal users
+        // Dashboard para usuários normais
         [
             'text' => 'Dashboard',
             'url'  => 'user/dashboard',
             'icon' => 'fas fa-tachometer-alt',
             'can'  => 'access-user',
         ],
-        // Profile for all authenticated and active users
+        // Perfil para todos os usuários autenticados
         [
             'text' => 'Perfil',
             'url'  => 'user/profile',
             'icon' => 'fas fa-user',
-            'can'  => 'auth', // Laravel's built-in 'auth' gate for authenticated users
+            'can'  => 'auth', // Gate padrão do Laravel para usuários autenticados
         ],
-        // Admin-only menu items
+        // Itens exclusivos para administradores
         [
-            'text' => 'Gerenciar Usuários',
+            'text' => 'Usuários',
             'url'  => 'admin/users',
             'icon' => 'fas fa-users',
             'can'  => 'access-admin',
         ],
         [
-            'text' => 'Configurações do Sistema',
+            'text' => 'Configurações',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-cogs',
             'can'  => 'access-admin',

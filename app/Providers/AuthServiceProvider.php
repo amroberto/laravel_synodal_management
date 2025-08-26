@@ -9,19 +9,19 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        // Define model policies here, if any
+        // Políticas de modelo, se houver
     ];
 
     public function boot(): void
     {
         $this->registerPolicies();
 
-        // Gate for admin users
+        // Gate para administradores
         Gate::define('access-admin', function (User $user) {
             return $user->is_active && $user->is_admin;
         });
 
-        // Gate for normal users
+        // Gate para usuários normais
         Gate::define('access-user', function (User $user) {
             return $user->is_active && !$user->is_admin;
         });
