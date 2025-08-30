@@ -335,10 +335,10 @@ return [
                 ],
                 [
                     'text' => 'Sínodo',
-                    'url'  => 'admin/synod/edit',
+                    'url' => 'admin/synod/edit',
                     'icon' => 'fas fa-building',
                     'route' => 'admin.synod.edit',
-                    'can' => 'access-admin-panel'
+                    'can' => 'access-admin-panel',
                 ],
             ]
         ],
