@@ -31,21 +31,21 @@
                 <!-- Informações do Estado -->
                 <h5 class="mt-4 mb-3">{{ __('Informações do Estado') }}</h5>
                 <div class="row">
-                    <div class="col-md-4">
-                        <x-adminlte-input name="name" label="{{ __('Nome do Estado') }}" value="{{ $state->name }}"
-                            disabled igroup-size="sm">
-                            <x-slot name="prependSlot">
-                                <div class="input-group-text"><i class="fas fa-flag"></i></div>
-                            </x-slot>
-                        </x-adminlte-input>
+                    <div class="col-mb-3 col-md-3 col-sm-6">
+                        <strong><i class="fas fa-id-badge"></i> {{ __('ID:') }}</strong>
+                        <p class="text-muted">{{ $state->id }}</p>
                     </div>
-                    <div class="col-md-4">
-                        <x-adminlte-input name="abbreviation" label="{{ __('Abreviação') }}" value="{{ $state->abbreviation }}"
-                            disabled igroup-size="sm">
-                            <x-slot name="prependSlot">
-                                <div class="input-group-text"><i class="fas fa-font"></i></div>
-                            </x-slot>
-                        </x-adminlte-input>
+                    <div class="col-mb-3 col-md-3 col-sm-6">
+                        <strong><i class="fas fa-flag"></i> {{ __('Nome:') }}</strong>
+                        <p class="text-muted">{{ $state->name }}</p>
+                    </div>
+                    <div class="col-mb-3 col-md-3 col-sm-6">
+                        <strong><i class="fas fa-map"></i> {{ __('UF:') }}</strong>
+                        <p class="text-muted">{{ $state->abbreviation }}</p>
+                    </div>
+                    <div class="col-mb-3 col-md-3 col-sm-6">
+                        <strong><i class="fas fa-globe"></i> {{ __('País:') }}</strong>
+                        <p class="text-muted">{{ $state->country->name ?? __('N/A') }}</p>
                     </div>
                 </div>
 
@@ -62,3 +62,4 @@
         </x-adminlte-card>
     </div>
 @stop
+

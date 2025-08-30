@@ -13,5 +13,6 @@ Route::middleware(['auth', 'verified', 'active', 'access-admin-panel'])
         Route::get('/settings', [SettingsController::class, 'index'])->name('admin.settings');
         Route::resource('users', UserController::class)->names('admin.users');
         Route::resource('states', StateController::class)->names('admin.states');
+        Route::resource('countries', \App\Http\Controllers\Admin\CountryController::class)->names('admin.countries');
         Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggle-active');
     });

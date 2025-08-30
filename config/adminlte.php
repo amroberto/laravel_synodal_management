@@ -321,26 +321,48 @@ return [
             'can'  => 'auth',
         ],
         [
-            'text' => 'Usuários',
-            'url'  => 'admin/users',
-            'icon' => 'fas fa-users',
-            'icon_color' => 'green',
-            'can'  => 'access-admin-panel',
-        ],
-        [
             'text' => 'Configurações',
-            'url'  => 'admin/settings',
             'icon' => 'fas fa-cogs',
             'icon_color' => 'purple',
-            'can'  => 'access-admin-panel',
+            'submenu' => [
+                [
+                    'text' => 'Usuários',
+                    'url'  => 'admin/users',
+                    'icon' => 'fas fa-users',
+                    'icon_color' => 'green',
+                    'can'  => 'access-admin-panel',
+                    'active' => ['admin/users*'],
+                ],
+                [
+                    'text' => 'Sínodo',
+                    'url'  => 'admin/synod/edit',
+                    'icon' => 'fas fa-building',
+                    'route' => 'admin.synod.edit',
+                    'can' => 'access-admin-panel'
+                ],
+            ]
         ],
         [
-            'text' => 'Estados',
-            'url'  => 'admin/states',
-            'icon' => 'fas fa-flag',
-            'icon_color' => 'red',
-            'can'  => 'access-admin-panel',
-        ],
+            'text' => 'Cadastro',
+            'url' => '#',
+            'submenu' => [
+                [
+                    'text' => 'Países',
+                    'url'  => 'admin/countries',
+                    'icon' => 'fas fa-flag',
+                    'icon_color' => 'red',
+                    'can'  => 'access-admin-panel',
+                ],
+                [
+                    'text' => 'Estados',
+                    'url'  => 'admin/states',
+                    'icon' => 'fas fa-map',
+                    'icon_color' => 'green',
+                    'can'  => 'access-admin-panel',
+                ],
+            ]
+        ]
+        
     ],
 
     /*

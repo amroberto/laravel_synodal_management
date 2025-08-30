@@ -74,17 +74,34 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
 @stop
 
+@section('plugins.Datatables', true)
+
 @section('js')
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#states-table').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese-Brasil.json"
+<script>
+    $(document).ready(function() {
+        var table = $('#states-table').DataTable({
+            language: {
+                emptyTable: "Nenhum registro encontrado"
+                , info: "Mostrando de _START_ até _END_ de _TOTAL_ registros"
+                , infoEmpty: "Mostrando 0 até 0 de 0 registros"
+                , infoFiltered: "(Filtrados de _MAX_ registros)"
+                , lengthMenu: "Mostrar _MENU_ registros"
+                , loadingRecords: "Carregando..."
+                , processing: "Processando..."
+                , search: "Pesquisar"
+                , zeroRecords: "Nenhum registro encontrado"
+                , paginate: {
+                    next: "Próximo"
+                    , previous: "Anterior"
                 }
-            });
+            }
+            , autoWidth: false,
+            responsive: true,
         });
-    </script>
+
+        // Ajusta as colunas após a inicialização
+        table.columns.adjust().draw();
+    });
+
+</script>
 @stop

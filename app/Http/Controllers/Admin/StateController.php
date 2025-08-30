@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\State;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -49,8 +50,9 @@ class StateController extends Controller
         $state = State::find($id);
 
         if(is_null($state)) {
-            return redirect()->route('admin.states.index')->with('error', __('Estado não encontrao!'));
+            return redirect()->route('admin.states.index')->with('error', __('Estado não encontrado!'));
         }
+        return view('admin.states.show', compact('state'));
     }
 
     /**
@@ -58,13 +60,14 @@ class StateController extends Controller
      */
     public function edit(string $id)
     {
+        $countries = Country::all();
         $state = State::find($id);
 
         if(is_null($state)) {
             return redirect()->route('admin.states.index')->with('error', __('Estado não encontrao!'));
         }
 
-        return view('admin.states.edit', compact('state'));
+        return view('admin.states.edit', ['state' => $state, 'countries' => $countries]);
     }
 
     /**
