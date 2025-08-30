@@ -337,6 +337,7 @@ return [
                     'text' => 'Sínodo',
                     'url' => 'admin/synod/edit',
                     'icon' => 'fas fa-building',
+                    'icon_color' => 'cyan',
                     'route' => 'admin.synod.edit',
                     'can' => 'access-admin-panel',
                 ],
@@ -360,9 +361,15 @@ return [
                     'icon_color' => 'green',
                     'can'  => 'access-admin-panel',
                 ],
+                [
+                    'text' => 'Cidades',
+                    'url'  => 'admin/cities',
+                    'icon' => 'fas fa-map-marker-alt',
+                    'icon_color' => 'blue',
+                    'can'  => 'access-admin-panel',
+                ],
             ]
         ]
-        
     ],
 
     /*

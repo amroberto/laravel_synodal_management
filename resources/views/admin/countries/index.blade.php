@@ -47,20 +47,18 @@
                         <td>{{ $country->name }}</td>
                         <td>{{ $country->code }}</td>
                         <td>
-                            <a href="{{ route('admin.countries.show', $country) }}" class="btn btn-info btn-sm" title="{{ __('Ver Detalhes') }}">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('admin.countries.edit', $country) }}" class="btn btn-warning btn-sm" title="{{ __('Editar') }}">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="{{ route('admin.countries.destroy', $country) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('Tem certeza que deseja deletar este país?') }}');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" title="{{ __('Deletar') }}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
+                                <a href="{{ route('admin.countries.edit', $country) }}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> {{ __('Editar') }}
+                                </a>
+                                <form action="{{ route('admin.countries.destroy', $country) }}" method="POST" class="d-inline"
+                                      onsubmit="return confirm('{{ __('Tem certeza que deseja excluir este País? Esta ação não pode ser desfeita.') }}');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash-alt"></i> {{ __('Excluir') }}
+                                    </button>
+                                </form>
+                            </td>
                     </tr>
                 @endforeach
             </tbody>

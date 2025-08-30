@@ -23,7 +23,8 @@ class StateController extends Controller
      */
     public function create()
     {
-        return view('admin.states.create');
+        $countries = Country::all();
+        return view('admin.states.create', compact('countries'));
     }
 
     /**
