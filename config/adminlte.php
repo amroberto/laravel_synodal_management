@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-
 return [
 
     /*
@@ -300,45 +298,48 @@ return [
     |
     */
 
-    /*
-    |--------------------------------------------------------------------------
-    | Menu Items
-    |--------------------------------------------------------------------------
-    */
     'menu' => [
-        // Dashboard para administradores
         [
             'text' => 'Dashboard',
             'url'  => 'admin/dashboard',
             'icon' => 'fas fa-tachometer-alt',
-            'can'  => 'access-admin',
+            'icon_color' => 'yellow',
+            'can'  => 'access-admin-panel',
         ],
-        // Dashboard para usuários normais
         [
             'text' => 'Dashboard',
             'url'  => 'user/dashboard',
             'icon' => 'fas fa-tachometer-alt',
-            'can'  => 'access-user',
+            'icon_color' => 'yellow',
+            'can'  => 'access-user-panel',
         ],
-        // Perfil para todos os usuários autenticados
         [
             'text' => 'Perfil',
             'url'  => 'user/profile',
             'icon' => 'fas fa-user',
-            'can'  => 'auth', // Gate padrão do Laravel para usuários autenticados
+            'icon_color' => 'blue',
+            'can'  => 'auth',
         ],
-        // Itens exclusivos para administradores
         [
             'text' => 'Usuários',
             'url'  => 'admin/users',
             'icon' => 'fas fa-users',
-            'can'  => 'access-admin',
+            'icon_color' => 'green',
+            'can'  => 'access-admin-panel',
         ],
         [
             'text' => 'Configurações',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-cogs',
-            'can'  => 'access-admin',
+            'icon_color' => 'purple',
+            'can'  => 'access-admin-panel',
+        ],
+        [
+            'text' => 'Estados',
+            'url'  => 'admin/states',
+            'icon' => 'fas fa-flag',
+            'icon_color' => 'red',
+            'can'  => 'access-admin-panel',
         ],
     ],
 
@@ -378,7 +379,7 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -398,7 +399,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -413,7 +414,7 @@ return [
             ],
         ],
         'Chartjs' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',

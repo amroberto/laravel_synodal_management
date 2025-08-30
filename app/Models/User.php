@@ -23,7 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'is_admin',
+        'user_type',
         'is_active',
         'password',
     ];
@@ -48,10 +48,23 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'user_type' => UserTypeEnum::class,
+            'active' => 'boolean',
         ];
     }
-    public function canAccessPanel(Panel $panel): bool
+
+    public function isAdmin():bool
     {
-        return $this->is_active;
+        return strtolower($this->user_type) === 'admin';
+    }
+
+    public function isReader():bool
+    {
+        return strtolower($this->user_type) === 'reader';
+    }
+
+    public function isUser():bool
+    {
+        return strtolower($this->user_type) === 'user';
     }
 }

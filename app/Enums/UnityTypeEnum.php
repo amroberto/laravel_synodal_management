@@ -2,11 +2,18 @@
 
 namespace App\Enums;
 
+// use Filament\Support\Contracts\HasLabel;
+// use Filament\Support\Contracts\HasColor;
 
-use Filament\Support\Contracts\HasLabel;
-use Filament\Support\Contracts\HasColor;
-use Filament\Support\Contracts\HasIcon;
-enum UnityTypeEnum: string implements HasLabel, HasColor, HasIcon
+interface HasLabel {
+    public function getLabel(): ?string;
+}
+
+interface HasColor {
+    public function getColor(): string | array | null;
+}
+
+enum UnityTypeEnum: string implements HasLabel, HasColor
 {
     case PreachingPoint = 'preaching_point';
     case Community = 'community';

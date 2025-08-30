@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +21,8 @@ class IsActive
             return $next($request);
         }
 
+        Log::warning('Acesso negado no middleware IsActive', ['user_id' => Auth::id()]);
         Auth::logout();
-        return redirect('/login')->with('error', 'Sua conta está inativa.');
+        return redirect('/login')->with('error', __('Sua conta está inativa.'));
     }
 }

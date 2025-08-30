@@ -19,7 +19,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('vendor.adminlte.auth.register');
+        return view('auth.register');
     }
 
     /**
@@ -40,7 +40,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'is_active' => true,
-            'is_admin' => false,
+            'user_type' => 'user',
         ]);
 
         event(new Registered($user));

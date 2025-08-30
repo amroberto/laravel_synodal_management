@@ -1,8 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+->middleware('auth')
+->name('logout');
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,8 +21,3 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/user.php';
-
-Auth::routes();
-
-
-

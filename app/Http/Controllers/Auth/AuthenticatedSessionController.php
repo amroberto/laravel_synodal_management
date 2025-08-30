@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Auth\LoginRequest;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -16,7 +17,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('vendor.adminlte.auth.login');
+        return view('auth.login');
     }
 
     /**
@@ -24,16 +25,39 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        try {
+            Log::info('Tentativa de login para email: ' . $request->email);
+            $credentials = $request->only('email', 'password');
+            Log::info('Credenciais recebidas: ' . json_encode(['email' => $credentials['email'], 'password' => '***']));
 
-        if (!Auth::user()->is_active) {
-            Auth::logout();
-            return redirect()->route('login')->with('error', 'Sua conta está inativa. Entre em contato com o administrador.');
+            if (!Auth::attempt($credentials)) {
+                Log::warning('Falha na autenticação para email: ' . $request->email);
+                return redirect()->route('login')->with('error', 'Credenciais inválidas.');
+            }
+
+            $request->session()->regenerate();
+            $user = Auth::user();
+            $userType = $user->user_type->value;
+            Log::info('Login bem-sucedido para usuário ID: ' . $user->id . ', user_type: ' . $userType);
+
+            switch ($userType) {
+                case 'admin':
+                    Log::info('Redirecionando para admin.dashboard para usuário ID: ' . $user->id);
+                    return redirect()->route('admin.dashboard');
+                case 'user':
+                    Log::info('Redirecionando para user.dashboard para usuário ID: ' . $user->id);
+                    return redirect()->route('user.dashboard');
+                case 'reader':
+                    Log::info('Redirecionando para home para usuário ID: ' . $user->id);
+                    return redirect()->route('dashboard');
+                default:
+                    Log::warning('Nenhum user_type específico correspondido para usuário ID: ' . $user->id . ', voltando para home');
+                    return redirect()->route('dashboard');
+            }
+        } catch (\Exception $e) {
+            Log::error('Erro ao realizar login: ' . $e->getMessage() . ' | Email: ' . $request->email);
+            return redirect()->route('login')->with('error', 'Erro ao realizar login: ' . $e->getMessage());
         }
-
-        $request->session()->regenerate();
-
-        return redirect()->intended(route(Auth::user()->is_admin ? 'admin.dashboard' : 'user.dashboard'));
     }
 
     /**
@@ -41,10 +65,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::logout();
+        try {
+        $userId = Auth::id();
+        Log::info('Tentativa de logout para usuário ID: ' . ($userId ?? 'convidado'));
+        Auth::guard('web')->logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        Log::info('Logout bem-sucedido para usuário ID: ' . ($userId ?? 'convidado'));
+        return redirect()->route('home')->with('success', 'Logout realizado com sucesso.');
+        } catch (\Exception $e) {
+            Log::error('Erro ao realizar logout: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Erro ao realizar logout.');
+        }
     }
 }
