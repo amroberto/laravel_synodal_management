@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', __('Países'))
+@section('title', __('Cargos'))
 
 @section('content_header')
-<h1 class="m-0 text-dark">{{ __('Cadastrar País') }}</h1>
+<h1 class="m-0 text-dark">{{ __('Cadastrar Cargo') }}</h1>
 @stop
 @section('content')
 <div class="container-fluid">
@@ -11,8 +11,8 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">{{ __('Home') }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.countries.index') }}">{{ __('Países') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Cadastrar País') }}</li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.positions.index') }}">{{ __('Cargos') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Cadastrar Cargo') }}</li>
         </ol>
     </nav>
     <!-- Alertas -->
@@ -26,7 +26,7 @@
     </x-adminlte-alert>
     @endif
 
-    <form action="{{ route('admin.countries.store') }}" method="POST">
+    <form action="{{ route('admin.positions.store') }}" method="POST">
         @csrf
         <x-adminlte-card>
             <div class="card card-primary card-outline">
@@ -38,20 +38,10 @@
                         <div class="mb-3 col-md-6 col-sm-12">
                             <label class="form-label">{{ __('Nome') }}</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-globe"></i></span>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="{{ __('Digite o nome do País') }}" required>
+                                <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="{{ __('Digite o nome do Cargo') }}" required>
                             </div>
                             @error('name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3 col-md-6 col-sm-12">
-                            <label class="form-label">{{ __('Code') }}</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-map"></i></span>
-                                <input type="text" class="form-control @error('code') is-invalid @enderror" id="name" name="name" value="{{ old('code') }}" placeholder="{{ __('Digite o código do País') }}" required>
-                            </div>
-                            @error('code')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -61,7 +51,7 @@
             <!-- Botões -->
             <div class="mb-3">
                 <button type="submit" class="btn btn-primary btn-sm"><i class="mr-1 fas fa-save"></i> {{ __('Salvar') }}</button>
-                <a href="{{ route('admin.countries.index') }}" class="btn btn-secondary btn-sm"><i class="mr-1 fas fa-arrow-left"></i> {{ __('Voltar') }}</a>
+                <a href="{{ route('admin.positions.index') }}" class="btn btn-secondary btn-sm"><i class="mr-1 fas fa-arrow-left"></i> {{ __('Voltar') }}</a>
             </div>
         </x-adminlte-card>
     </form>

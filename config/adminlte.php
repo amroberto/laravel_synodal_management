@@ -365,6 +365,13 @@ return [
                     'text' => 'Cidades',
                     'url'  => 'admin/cities',
                     'icon' => 'fas fa-map-marker-alt',
+                    'icon_color' => 'green',
+                    'can'  => 'access-admin-panel',
+                ],
+                [
+                    'text' => 'Cargos',
+                    'url'  => 'admin/positions',
+                    'icon' => 'fas fa-briefcase',
                     'icon_color' => 'blue',
                     'can'  => 'access-admin-panel',
                 ],

@@ -48,12 +48,7 @@ class StateController extends Controller
      */
     public function show(string $id)
     {
-        $state = State::find($id);
-
-        if(is_null($state)) {
-            return redirect()->route('admin.states.index')->with('error', __('Estado não encontrado!'));
-        }
-        return view('admin.states.show', compact('state'));
+        //
     }
 
     /**

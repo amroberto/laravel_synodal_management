@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', __('Países'))
+@section('title', __('Cargos'))
 
 @section('content_header')
-<h1 class="m-0 text-dark">{{ __('Editar País') }}</h1>
+<h1 class="m-0 text-dark">{{ __('Editar Cargo') }}</h1>
 @stop
 
 @section('content')
@@ -12,8 +12,8 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">{{ __('Home') }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.countries.index') }}">{{ __('Países') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Editar País') }}</li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.positions.index') }}">{{ __('Cargos') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Editar Cargo') }}</li>
         </ol>
     </nav>
     <!-- Alertas -->
@@ -27,34 +27,24 @@
     </x-adminlte-alert>
     @endif
     <!-- Formulário -->
-    <form action="{{ route('admin.countries.update', $country) }}" method="POST">
+    <form action="{{ route('admin.positions.update', $position) }}" method="POST">
         @csrf
         @method('PUT')
-        <x-adminlte-card title="{{ __('Editar País') }}" theme="primary" collapsible>
+        <x-adminlte-card title="{{ __('Editar Cargo') }}" theme="primary" collapsible>
             <!-- Informações Gerais -->
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h3 class="card-title"><i class="mr-2 fas fa-info-circle"></i>{{ __('Editar País') }}</h3>
+                    <h3 class="card-title"><i class="mr-2 fas fa-info-circle"></i>{{ __('Editar Cargo') }}</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="mb-3 col-md-6 col-sm-12">
                             <label class="form-label">{{ __('Nome') }}</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-globe"></i></span>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $country->name) }}" placeholder="{{ __('Digite o nome do País') }}" required>
+                                <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $position->name) }}" placeholder="{{ __('Digite o nome do Cargo') }}" required>
                             </div>
                             @error('name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3 col-md-6 col-sm-12">
-                            <label class="form-label">{{ __('Code') }}</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-map"></i></span>
-                                <input type="text" class="form-control @error('code') is-invalid @enderror" id="code3" name="code" value="{{ old('code', $country->code) }}" placeholder="{{ __('Digite o código do País') }}" required>
-                            </div>
-                            @error('code')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -62,7 +52,7 @@
                      <!-- Botões -->
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">{{ __('Salvar') }}</button>
-                        <a href="{{ route('admin.countries.index') }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
+                        <a href="{{ route('admin.positions.index') }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
                     </div>
                 </div>
             </div>

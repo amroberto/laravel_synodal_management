@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', __('Cadastrar Cidade'))
+@section('title', __('Cidades'))
 
 @section('content_header')
     <h1 class="m-0 text-dark">{{ __('Cadastrar Cidade') }}</h1>

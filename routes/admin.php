@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\SynodController;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\PositionController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\DashboardController;
 
@@ -19,7 +20,8 @@ Route::middleware(['auth', 'verified', 'active', 'access-admin-panel'])
         Route::resource('countries', CountryController::class)->names('admin.countries');
         Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggle-active');
         Route::resource('cities', CityController::class)->names('admin.cities');
-
+        Route::resource('positions', PositionController::class)->names('admin.positions');
+        
         // Rotas para edição do Sínodo
         Route::get('/synod/edit', [SynodController::class, 'edit'])->name('admin.synod.edit');
         Route::put('/synod', [SynodController::class, 'update'])->name('admin.synod.update');

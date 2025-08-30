@@ -55,12 +55,7 @@ class CityController extends Controller
      */
     public function show(string $id)
     {
-        $city = City::find($id);
-
-        if(is_null($city)) {
-            return redirect()->route('admin.cities.index')->with('error', __('Cidade não encontrada!'));
-        }
-        return view('admin.cities.show', ['city' => $city]);
+        //
     }
 
     /**
