@@ -375,6 +375,13 @@ return [
                     'icon_color' => 'blue',
                     'can'  => 'access-admin-panel',
                 ],
+                [
+                    'text' => 'Comunidades',
+                    'url' => 'admin/communities',
+                    'icon' => 'fas fa-church',
+                    'icon_color' => 'yellow',
+                    'can' => 'access-admin-panel',
+                ],
             ]
         ]
     ],

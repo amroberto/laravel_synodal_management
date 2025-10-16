@@ -21,6 +21,8 @@
     "dependencies": {
         "admin-lte": "^4.0.0-rc3",
         "bootstrap": "^5.3.7",
-        "jquery": "^3.7.1"
+        "imask": "^7.6.1",
+        "jquery": "^3.7.1",
+        "jquery-mask-plugin": "^1.14.16"
     }
 }

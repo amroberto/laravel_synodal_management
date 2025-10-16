@@ -2,20 +2,29 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
-
 class CnpjService
 {
     public function consultarCnpj($cnpj)
     {
-        $cnpj = preg_replace('/\D/', '', $cnpj); // Remove caracteres não numéricos
+        // Exemplo usando ReceitaWS (substitua pela sua implementação)
+        $url = "https://www.receitaws.com.br/v1/cnpj/{$cnpj}";
+        $response = file_get_contents($url); // Ou use Http::get() com Guzzle
+        $data = json_decode($response, true);
 
-        $response = Http::get("https://www.receitaws.com.br/v1/cnpj/{$cnpj}");
-
-        if ($response->successful()) {
-            return $response->json();
+        if (isset($data['status']) && $data['status'] === 'ERROR') {
+            return null;
         }
 
-        return null; // 
+        return [
+            'nome' => $data['nome'] ?? '',
+            'fantasia' => $data['fantasia'] ?? '',
+            'email' => $data['email'] ?? '',
+            'telefone' => $data['telefone'] ?? '',
+            'cep' => $data['cep'] ?? '',
+            'logradouro' => $data['logradouro'] ?? '',
+            'numero' => $data['numero'] ?? '',
+            'complemento' => $data['complemento'] ?? '',
+            'bairro' => $data['bairro'] ?? '',
+        ];
     }
 }

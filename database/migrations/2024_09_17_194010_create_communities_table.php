@@ -16,12 +16,18 @@ return new class extends Migration
             $table->id();
             $table->string('corporate_name');
             $table->string('fantasy_name');
-            $table->string('document')->nullable();
-            $table->enum('unity_type', UnityTypeEnum::values())->default(UnityTypeEnum::Community->value);
+            $table->string('cnpj')->nullable();
+            $table->enum('unity_type', array_map(fn($case) => $case->value, UnityTypeEnum::cases()))->default(UnityTypeEnum::COMMUNITY->value);
+            $table->string('cep')->nullable();
+            $table->string('address')->nullable();
+            $table->string('number')->nullable();
+            $table->string('complement')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
             $table->string('phone')->nullable();
             $table->string('mobile')->nullable();
             $table->string('email')->nullable();
-            $table->foreignId('address_id')->constrained()->onDelete('cascade');
+            $table->string('website')->nullable();
             $table->timestamps();
         });
     }
@@ -33,7 +39,7 @@ return new class extends Migration
     {
         Schema::table('communities', function (Blueprint $table) {
             $table->dropForeign(['address_id']);  // Remover a chave estrangeira
-        });        
+        });
         Schema::dropIfExists('communities');
     }
 };

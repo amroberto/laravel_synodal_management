@@ -2,53 +2,32 @@
 
 namespace App\Enums;
 
-// use Filament\Support\Contracts\HasLabel;
-// use Filament\Support\Contracts\HasColor;
-
-interface HasLabel {
-    public function getLabel(): ?string;
-}
-
-interface HasColor {
-    public function getColor(): string | array | null;
-}
-
-enum UnityTypeEnum: string implements HasLabel, HasColor
+enum UnityTypeEnum: string
 {
-    case PreachingPoint = 'preaching_point';
-    case Community = 'community';
-    case Parish = 'parish';
+    case PREACHINGPOINT = 'preaching_point';
+    case COMMUNITY = 'community';
+    case PARISH = 'parish';
 
-    // Método para retornar os valores da enum
-    public static function values(): array
+    public static function getValues(): array
     {
         return array_column(self::cases(), 'value');
     }
-
-    public function getLabel(): ?string
+    
+    public static function getLabels(): array
     {
-        return match ($this) {
-            self::PreachingPoint => 'Ponto de Pregação',
-            self::Community => 'Comunidade',
-            self::Parish => 'Paróquia',
-        };
+        return [
+            self::PREACHINGPOINT->value => 'Ponto de Pregação',
+            self::COMMUNITY->value => 'Comunidade',
+            self::PARISH->value => 'Paróquia',
+        ];
     }
 
-    public function getColor(): string | array | null
+    public function label():string
     {
         return match ($this) {
-            self::PreachingPoint => 'warning',
-            self::Community => 'success',
-            self::Parish => 'info',
+            self::PREACHINGPOINT => 'Ponto de Pregação',
+            self::COMMUNITY => 'Comunidade',
+            self::PARISH => 'Paróquia',
         };
     }
-    public function getIcon(): ?string
-    {
-        return match($this)
-        {
-            self::PreachingPoint => 'heroicon-o-home-modern',
-            self::Community => 'heroicon-o-building-library',
-            self::Parish => 'heroicon-o-map-pin',
-        };
-    }   
 }

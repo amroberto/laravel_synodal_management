@@ -19,12 +19,18 @@ class Community extends Model
     protected $fillable = [
         'corporate_name',
         'fantasy_name',
-        'document',
+        'cnpj',
         'unity_type',
+        'cep',
+        'address',
+        'number',
+        'complement',
+        'city',
+        'state',
         'phone',
         'mobile',
         'email',
-        'address_id',
+        'website'
     ];
 
     public $timestamps = true;
@@ -32,15 +38,6 @@ class Community extends Model
     protected $casts = [
         'unity_type' => UnityTypeEnum::class,
     ];
-
-
-    /**
-     * @return BelongsTo
-     */
-    public function address(): BelongsTo
-    {
-        return $this->belongsTo(Address::class);
-    } 
 
     /**
      * [Description for communityLeaderships]
