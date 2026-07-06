@@ -17,8 +17,11 @@ $(document).ready(function () {
     // Apply masks
     try {
         $('#cnpj').mask('00.000.000/0000-00', { clearIfNotMatch: true });
+        $('#cpf').mask('000.000.000-00', { clearIfNotMatch: true });
+        $('#rg').mask('00.000.000-0', { clearIfNotMatch: true });
         $('#cep').mask('00000-000', { clearIfNotMatch: true });
         $('#phone').mask('(00) 0000-0000', { clearIfNotMatch: true });
+        $('#business_phone').mask('(00) 0000-0000', { clearIfNotMatch: true });
         $('#mobile').mask('(00) 00000-0000', { clearIfNotMatch: true });
         console.log('Máscaras aplicadas com sucesso em app.js');
     } catch (e) {

@@ -4,30 +4,43 @@ namespace App\Enums;
 
 enum UnityTypeEnum: string
 {
-    case PREACHINGPOINT = 'preaching_point';
-    case COMMUNITY = 'community';
-    case PARISH = 'parish';
+    private const PREACHINGPOINT_LABEL = 'Ponto de Pregação';
+    private const COMMUNITY_LABEL = 'Comunidade';
+    private const PARISH_LABEL = 'Paróquia';
+
+    case PREACHINGPOINT = 'ponto de pregação';
+    case COMMUNITY = 'comunidade';
+    case PARISH = 'paróquia';
 
     public static function getValues(): array
     {
-        return array_column(self::cases(), 'value');
+        return array_map(fn(self $case) => $case->value, self::cases());
     }
-    
+
+    public function value():string
+    {
+        return match ($this) {
+            self::PREACHINGPOINT => self::PREACHINGPOINT_LABEL,
+            self::COMMUNITY => self::COMMUNITY_LABEL,
+            self::PARISH => self::PARISH_LABEL,
+        };
+    }
+
     public static function getLabels(): array
     {
         return [
-            self::PREACHINGPOINT->value => 'Ponto de Pregação',
-            self::COMMUNITY->value => 'Comunidade',
-            self::PARISH->value => 'Paróquia',
+            self::PREACHINGPOINT->value => self::PREACHINGPOINT_LABEL,
+            self::COMMUNITY->value => self::COMMUNITY_LABEL,
+            self::PARISH->value => self::PARISH_LABEL,
         ];
     }
 
-    public function label():string
+    public function label(): string
     {
         return match ($this) {
-            self::PREACHINGPOINT => 'Ponto de Pregação',
-            self::COMMUNITY => 'Comunidade',
-            self::PARISH => 'Paróquia',
+            self::PREACHINGPOINT => self::PREACHINGPOINT_LABEL,
+            self::COMMUNITY => self::COMMUNITY_LABEL,
+            self::PARISH => self::PARISH_LABEL,
         };
     }
 }

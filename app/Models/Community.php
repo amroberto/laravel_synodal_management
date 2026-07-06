@@ -25,6 +25,7 @@ class Community extends Model
         'address',
         'number',
         'complement',
+        'district',
         'city',
         'state',
         'phone',
@@ -45,7 +46,7 @@ class Community extends Model
      * @return HasMany
      * 
      */
-    public function communityLeaderships():HasMany
+    public function communityLeaderships(): HasMany
     {
         return $this->hasMany(CommunityLeadership::class);
     }
@@ -57,7 +58,14 @@ class Community extends Model
      * 
      */
     public function revenues()
-{
-    return $this->hasMany(Revenue::class);  // Exemplo de um relacionamento One-to-Many
-}
+    {
+        return $this->hasMany(Revenue::class);  // Exemplo de um relacionamento One-to-Many
+    }
+
+    public function leaderships()
+    {
+        return $this->belongsToMany(Leadership::class, 'community_leaderships')
+            ->withPivot('position_id')
+            ->withTimestamps();
+    }
 }

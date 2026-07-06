@@ -2,7 +2,7 @@
     <div class="card-header">
         <h3 class="card-title"><i class="fas fa-user-tie"></i> Lideranças da Comunidade</h3>
     </div>
-    <div class="card-body p-0">
+    <div class="p-0 card-body">
         <div class="table-responsive">
             <table class="table table-bordered table-hover" id="leadershipTable">
                 <thead>
@@ -17,7 +17,7 @@
                         @foreach($community->leaderships as $leadership)
                             <tr>
                                 <td>
-                                    <select name="leaderships[]['leadership_id']" class="form-control @error('leaderships.*.leadership_id') is-invalid @enderror" required>
+                                    <select name="leaderships[]['leadership_id']" class="form-control @error('leaderships.*.leadership_id') is-invalid @enderror">
                                         <option value="">Selecione uma liderança</option>
                                         @foreach($leaderships as $lead)
                                             <option value="{{ $lead->id }}" {{ $leadership->id == $lead->id ? 'selected' : '' }}>
@@ -30,7 +30,7 @@
                                     @enderror
                                 </td>
                                 <td>
-                                    <select name="leaderships[]['position_id']" class="form-control @error('leaderships.*.position_id') is-invalid @enderror" required>
+                                    <select name="leaderships[]['position_id']" class="form-control @error('leaderships.*.position_id') is-invalid @enderror">
                                         <option value="">Selecione um cargo</option>
                                         @foreach($positions as $pos)
                                             <option value="{{ $pos->id }}" {{ $leadership->pivot->position_id == $pos->id ? 'selected' : '' }}>
@@ -52,7 +52,7 @@
                     @else
                         <tr>
                             <td>
-                                <select name="leaderships[]['leadership_id']" class="form-control @error('leaderships.*.leadership_id') is-invalid @enderror" required>
+                                <select name="leaderships[]['leadership_id']" class="form-control @error('leaderships.*.leadership_id') is-invalid @enderror">
                                     <option value="">Selecione um líder</option>
                                     @foreach($leaderships as $lead)
                                         <option value="{{ $lead->id }}">{{ $lead->name }}</option>
@@ -63,7 +63,7 @@
                                 @enderror
                             </td>
                             <td>
-                                <select name="leaderships[]['position_id']" class="form-control @error('leaderships.*.position_id') is-invalid @enderror" required>
+                                <select name="leaderships[]['position_id']" class="form-control @error('leaderships.*.position_id') is-invalid @enderror">
                                     <option value="">Selecione um cargo</option>
                                     @foreach($positions as $pos)
                                         <option value="{{ $pos->id }}">{{ $pos->name }}</option>

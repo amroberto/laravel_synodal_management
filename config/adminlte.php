@@ -382,6 +382,13 @@ return [
                     'icon_color' => 'yellow',
                     'can' => 'access-admin-panel',
                 ],
+                [
+                    'text' => 'Lideranças',
+                    'url' => 'admin/leaderships',
+                    'icon' => 'fas fa-user-tie',
+                    'icon_color' => 'cyan',
+                    'can' => 'access-admin-panel',
+                ]
             ]
         ]
     ],
@@ -491,6 +498,16 @@ return [
                 ],
             ],
         ],
+        'BsCustomFileInput' => [
+        'active' => false,
+        'files' => [
+            [
+                'type' => 'js',
+                'asset' => true,
+                'location' => 'vendor/bs-custom-file-input/bs-custom-file-input.min.js',
+            ],
+        ],
+    ],
     ],
 
     /*

@@ -1,19 +1,19 @@
 @extends('adminlte::page')
 
-@section('title', __('Comunidades'))
+@section('title', __('Lideranças'))
 
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="fas fa-home"></i> {{ __('Home') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Comunidades') }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Lideranças') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     <div class="container-fluid">
-        <x-adminlte-card title="{{ __('Lista de Comunidades') }}" theme="primary" theme-mode="outline" collapsible>
+        <x-adminlte-card title="{{ __('Lista de Lideranças') }}" theme="primary" theme-mode="outline" collapsible>
             <!-- Alertas -->
             @if (session('success'))
                 <x-adminlte-alert theme="success" title="{{ __('Sucesso') }}" dismissable>
@@ -26,16 +26,16 @@
             @endif
 
             <div class="mb-3">
-                <a href="{{ route('admin.communities.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> {{ __('Adicionar Nova Comunidade') }}
+                <a href="{{ route('admin.leaderships.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> {{ __('Adicionar Nova Liderança') }}
                 </a>
             </div>
 
-            <table id="communities-table" class="table table-bordered table-striped">
+            <table id="leaderships-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>{{ __('ID') }}</th>
-                        <th>{{ __('Nome Fantasia') }}</th>
+                        <th>{{ __('Nome') }}</th>
                         <th>{{ __('Telefone') }}</th>
                         <th>{{ __('Celular') }}</th>
                         <th>{{ __('E-mail') }}</th>
@@ -43,19 +43,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($communities as $community)
+                    @foreach ($leaderships as $leadership)
                         <tr>
-                            <td>{{ $community->id }}</td>
-                            <td>{{ $community->fantasy_name }}</td>
-                            <td>{{ $community->phone }}</td>
-                            <td>{{ $community->mobile }}</td>
-                            <td>{{ $community->email }}</td>
+                            <td>{{ $leadership->id }}</td>
+                            <td>{{ $leadership->name }}</td>
+                            <td>{{ $leadership->phone }}</td>
+                            <td>{{ $leadership->mobile }}</td>
+                            <td>{{ $leadership->email }}</td>
                             <td>
-                                <a href="{{ route('admin.communities.edit', $community) }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('admin.leaderships.edit', $leadership) }}" class="btn btn-sm btn-warning">
                                     <i class="fas fa-edit"></i> {{ __('Editar') }}
                                 </a>
-                                <form action="{{ route('admin.communities.destroy', $community) }}" method="POST" class="d-inline"
-                                      onsubmit="return confirm('{{ __('Tem certeza que deseja excluir esta comunidade? Esta ação não pode ser desfeita.') }}');">
+                                <form action="{{ route('admin.leaderships.destroy', $leadership) }}" method="POST" class="d-inline"
+                                      onsubmit="return confirm('{{ __('Tem certeza que deseja excluir esta liderança? Esta ação não pode ser desfeita.') }}');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">
@@ -79,7 +79,7 @@
 @section('js')
 <script>
     $(document).ready(function() {
-        var table = $('#communities-table').DataTable({
+        var table = $('#leaderships-table').DataTable({
             language: {
                 emptyTable: "Nenhum registro encontrado"
                 , info: "Mostrando de _START_ até _END_ de _TOTAL_ registros"

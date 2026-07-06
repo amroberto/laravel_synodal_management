@@ -11,19 +11,12 @@ class Position extends Model
 {
     use HasFactory;
 
+    use HasFactory;
+
     protected $fillable = ['name'];
 
-    public $timestamps = true;
-    
-    /**
-     * [Description for leaderships]
-     *
-     * @return BelongsToMany
-     * 
-     */
-    public function leaderships():BelongsToMany
+    public function communityLeaderships()
     {
-        return $this->belongsToMany(Leadership::class, 'community_leadership')
-            ->withTimestamps();
+        return $this->hasMany(CommunityLeadership::class);
     }
 }

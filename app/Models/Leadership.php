@@ -16,19 +16,25 @@ class Leadership extends Model
 
     protected $fillable = [
         'name',
+        'cpf',
+        'rg',
         'community_id',
         'birthdate',
         'is_active',
         'gender',
         'mobile',
         'business_phone',
-        'home_phone',
+        'phone',
         'email',
         'photo',
-        'address_id',
+        'cep',
+        'address',
+        'number',
+        'complement',
+        'district',
+        'city',
+        'state'
     ];
-
-    public $timestamps = true;
 
     /**
      * Get the attributes that should be cast.
@@ -42,14 +48,6 @@ class Leadership extends Model
             'is_active' => 'boolean',
             'gender' => 'string',
         ];
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function address(): BelongsTo
-    {
-        return $this->belongsTo(Address::class);
     }
 
     /**
@@ -83,7 +81,7 @@ class Leadership extends Model
      * @return BelongsTo
      * 
      */
-    public function community():BelongsTo
+    public function community(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Community::class);
     }

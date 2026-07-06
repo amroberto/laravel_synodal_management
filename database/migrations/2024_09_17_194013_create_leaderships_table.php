@@ -15,16 +15,24 @@ return new class extends Migration
         Schema::create('leaderships', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('cpf')->nullable();
+            $table->string('rg')->nullable();
             $table->boolean('is_active')->default(true);
             $table->date('birthdate');
             $table->enum('gender', GenderEnum::values());
             $table->foreignId('community_id')->constrained()->onDelete('cascade');
             $table->string('mobile')->nullable();
             $table->string('business_phone')->nullable();
-            $table->string('home_phone')->nullable();
+            $table->string('phone')->nullable();
             $table->string('email')->nullable();
-            $table->string('photo')->nullable(); 
-            $table->foreignId('address_id')->constrained()->onDelete('cascade');                
+            $table->string('photo')->nullable();
+            $table->string('cep')->nullable();
+            $table->string('address')->nullable();
+            $table->string('number')->nullable();
+            $table->string('complement')->nullable();
+            $table->string('district')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
             $table->timestamps();
         });
     }
